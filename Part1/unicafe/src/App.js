@@ -10,9 +10,9 @@ const App = () => {
 
   const Button = ({text, handleClick}) => {
     return (
-        <button onClick={handleClick}>
-          {text}
-        </button>
+      <button onClick={handleClick}>
+        {text}
+      </button>
     )
   }
 
@@ -24,9 +24,14 @@ const App = () => {
 
   const StatisticsLine = ({text, value, unit = ''}) => {
     return (
-      <div>
-        {text} {value} {unit}
-      </div>
+      <tr>
+        <td>
+          {text}
+        </td>
+        <td>
+          {value} {unit}
+        </td>
+      </tr>
     )
   }
 
@@ -59,19 +64,18 @@ const App = () => {
     return (
       <div>
         <StatisticsHeader />
+        <table>
+          <tbody>
+            <StatisticsLine text='Good' value={good} />
+            <StatisticsLine text='Neutral' value={neutral} />
+            <StatisticsLine text='Bad' value={bad} />
 
-        <StatisticsLine text='Good' value={good} />
-        <StatisticsLine text='Neutral' value={neutral} />
-        <StatisticsLine text='Bad' value={bad} />
-        <br />
+            <StatisticsLine text='All' value={sum} />
 
-        <StatisticsLine text='All' value={sum} />
-        <br />
-
-        <StatisticsLine text='Average' value={Avg(good, neutral, bad)} />
-        <br />
-
-        <StatisticsLine text='Positive Rate' value={good > 0 ? (100 * good / sum) : 0} unit={'%'} />
+            <StatisticsLine text='Average' value={Avg(good, neutral, bad)} />
+            <StatisticsLine text='Positive Rate' value={good > 0 ? (100 * good / sum) : 0} unit={'%'} />
+          </tbody>
+        </table>
       </div>
     )
   }
