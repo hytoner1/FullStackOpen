@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 
 const App = () => {
   // save clicks of each button to its own state
@@ -6,46 +6,46 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
+  // #region Button
 
-  const Average = ({ good, neutral, bad }) => {
-    const sum = good + neutral + bad
+  const Button = ({text, handleClick}) => {
+    return (
+        <button onClick={handleClick}>
+          {text}
+        </button>
+    )
+  }
+
+  // #endregion Button
+
+  // #region Statistics
+
+  const StatisticsHeader = () => {return (<h2> Statistics</h2>)}
+
+  const StatisticsLine = ({text, value, unit = ''}) => {
+    return (
+      <div>
+        {text} {value} {unit}
+      </div>
+    )
+  }
+
+  function Avg(g, n, b) {
+    const sum = g + n + b
     if (sum === 0) {
-      return (
-        <div>
-          Average 0
-        </div>
-      )
+      return 0
     }
 
-    return (
-      <div>
-        Average {(good - bad) / sum}
-      </div>
-    )
+    return (g - b) / sum
   }
-
-  const PositiveRate = ({ good, neutral, bad }) => {
-    if (good > 0) {
-      return (
-        <div>
-          Positive {100 * good / (good + neutral + bad)} %
-        </div>
-      )
-    }
-    return (
-      <div>
-        Positive 0
-      </div>
-    )
-  }
-
-  const StatisticsHeader = () => { return (<h2> Statistics</h2>) }
 
   const Statistics = (props) => {
     console.log('Statistics:', props)
-    const { good, neutral, bad } = props;
+    const {good, neutral, bad} = props
 
-    if (good + neutral + bad === 0) {
+    const sum = good + neutral + bad
+
+    if (sum === 0) {
       return (
         <div>
           <StatisticsHeader />
@@ -60,22 +60,23 @@ const App = () => {
       <div>
         <StatisticsHeader />
 
-        <p>
-          Good {good}
-          <br />
-          Neutral {neutral}
-          <br />
-          Bad {bad}
-        </p>
-        <p>
-          All {good + neutral + bad}
-        </p>
-        <Average good={good} neutral={neutral} bad={bad} />
-        <PositiveRate good={good} neutral={neutral} bad={bad} />
+        <StatisticsLine text='Good' value={good} />
+        <StatisticsLine text='Neutral' value={neutral} />
+        <StatisticsLine text='Bad' value={bad} />
+        <br />
+
+        <StatisticsLine text='All' value={sum} />
+        <br />
+
+        <StatisticsLine text='Average' value={Avg(good, neutral, bad)} />
+        <br />
+
+        <StatisticsLine text='Positive Rate' value={good > 0 ? (100 * good / sum) : 0} unit={'%'} />
       </div>
     )
   }
 
+  // #endregion Statistics
 
 
   return (
@@ -84,17 +85,11 @@ const App = () => {
         Give Feedback
       </h1>
 
-      <p>
-        <button onClick={() => setGood(good + 1)}>
-          Good
-        </button>
-        <button onClick={() => setNeutral(neutral + 1)}>
-          Neutral
-        </button>
-        <button onClick={() => setBad(bad + 1)}>
-          Bad
-        </button>
-      </p>
+      <Button text='Good' handleClick={() => setGood(good + 1)} />
+      &nbsp;
+      <Button text='Neutral' handleClick={() => setNeutral(neutral + 1)} />
+      &nbsp;
+      <Button text='Bad' handleClick={() => setBad(bad + 1)} />
 
       <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
