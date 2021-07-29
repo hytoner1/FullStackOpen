@@ -23,11 +23,11 @@ const App = () => {
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
   const handleVoteIncrement = () => {
-    const newVotes = {...votes}
+    const newVotes = [...votes]
     newVotes[selectedIdx] += 1
     setVotes(newVotes)
 
-    console.log('votes:', votes)
+    console.log('votes:', newVotes)
   }
 
   const handleNextAnecdote = () => {
@@ -38,6 +38,10 @@ const App = () => {
 
   return (
     <div>
+      <h1>
+        Anecdote of the day
+      </h1>
+
       <p>
         {anecdotes[selectedIdx]}
         <br />
@@ -47,6 +51,14 @@ const App = () => {
       <Button text='Vote' handleClick={handleVoteIncrement} />
       &nbsp;
       <Button text='Next Anecdote' handleClick={handleNextAnecdote} />
+
+      <h1>
+        Anecdote with most votes
+      </h1>
+
+      <p>
+        {anecdotes[votes.indexOf(Math.max(...votes))]}
+      </p>
     </div>
   )
 }
