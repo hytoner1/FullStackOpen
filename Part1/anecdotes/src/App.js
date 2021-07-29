@@ -1,5 +1,13 @@
 import React, {useState} from 'react'
 
+const Button = ({text, handleClick}) => {
+  return (
+    <button onClick={handleClick}>
+      {text}
+    </button>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -11,23 +19,34 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.'
   ]
 
-  const [selected, setSelected] = useState(0)
+  const [selectedIdx, setSelectedIdx] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
-  const Button = ({text, handleClick}) => {
-    return (
-      <button onClick={handleClick}>
-        {text}
-      </button>
-    )
+  const handleVoteIncrement = () => {
+    const newVotes = {...votes}
+    newVotes[selectedIdx] += 1
+    setVotes(newVotes)
+
+    console.log('votes:', votes)
+  }
+
+  const handleNextAnecdote = () => {
+    const newIdx = Math.floor(Math.random() * anecdotes.length)
+    console.log('handleNextAnecdote / newIdx:', newIdx)
+    setSelectedIdx(newIdx)
   }
 
   return (
     <div>
       <p>
-        {anecdotes[selected]}
+        {anecdotes[selectedIdx]}
+        <br />
+        has {votes[selectedIdx]} votes
       </p>
 
-      <Button text='Next Anecdote' handleClick={() => setSelected(Math.floor(Math.random() * anecdotes.length))} />
+      <Button text='Vote' handleClick={handleVoteIncrement} />
+      &nbsp;
+      <Button text='Next Anecdote' handleClick={handleNextAnecdote} />
     </div>
   )
 }
