@@ -3,5 +3,5 @@
 
 ## Status of tasks
 * **Part 0** - Done
-* **Part 1** - In progress
+* **Part 1** - Done
 * **Part 2** - Not started
