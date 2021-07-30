@@ -4,4 +4,5 @@
 ## Part 2
 ### Tasks 2.1 - 2.XX
 
-* 
+* courseinfo tasks 2.1 - 2.5
+  * Using own solutions from earlier.
