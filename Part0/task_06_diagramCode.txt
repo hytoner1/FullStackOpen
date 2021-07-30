@@ -1,0 +1,9 @@
+note over browser:
+New note created and rendered on the browser side
+end note
+
+browser->server: HTTP POST https://.../new_note_spa - Content JSON in the body
+server-->browser: HTTP 201 - Created
+
+
+
