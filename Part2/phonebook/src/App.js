@@ -1,29 +1,21 @@
 import React, {useState} from 'react'
+import Persons from "./components/Persons"
+import AddPerson from "./components/Form_addNew"
+import Filter from "./components/Filter"
 
-const Person = ({person}) => {
-  console.log('Person', person)
-  return (
-    <li key={person.name}>
-      {person.name}
-    </li>
-  )
-}
-
-const Persons = ({persons}) => {
-  console.log('Persons', persons)
-  return (
-    <ul>
-      {persons.map(person => <Person person={person} key={person.name} />)}
-    </ul>
-  )
-}
 
 const App = () => {
   const [persons, setPersons] = useState([
-    {name: 'Arto Hellas'}
-  ])
-  const [newName, setNewName] = useState('')
+    {
+      name: 'Arto Hellas',
+      number: '01-02-123'
+    }
+  ]);
 
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('01-02-');
+
+  const [filter, setFilter] = useState('');
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -32,33 +24,45 @@ const App = () => {
       window.alert('"' + newName + '" is already in the phonebook')
       setNewName('')
       return
-    }
+    };
 
     const personObj = {
-      name: newName
-    }
+      name: newName,
+      number: newNumber
+    };
+
     setPersons(persons.concat(personObj))
     setNewName('')
-  }
+    setNewNumber('01-02-')
+  };
 
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
-  }
+  };
 
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+  };
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value)
+  };
+
+  const personsToShow = filter === ''
+    ? persons
+    : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addPerson} >
-        name: <input value={newName} onChange={handleNameChange} />
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Filter filter={filter} onChange={handleFilterChange} />
 
+      <h2>Add new</h2>
+      <AddPerson addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
+      
       <h2>Numbers</h2>
-      <Persons persons={persons} />
+      <Persons persons={personsToShow} />
 
     </div>
   )
