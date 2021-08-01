@@ -4,6 +4,7 @@ import axios from 'axios'
 import Countries from "./components/Country"
 import Filter from "./components/Filter"
 
+require('dotenv').config();
 
 const App = () => {
   // #region States
