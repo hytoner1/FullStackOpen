@@ -4,7 +4,7 @@ const Country = ({country}) => {
   console.log('Country', country)
 
   if (!country) {
-    return(<div/>);
+    return (<div />);
   }
 
   return (
@@ -56,13 +56,16 @@ const CountryListEntry = ({country, onClick}) => {
 const Countries = ({countries}) => {
   console.log('Countries', countries);
 
-  const [selectedCountry, setSelectedCountry] = useState(countries[0]);
+  const [selectedCountry, setSelectedCountry] = useState();
 
   const handleButtonClick = (country) => {
     return () => setSelectedCountry(country);
   };
 
   if (countries.length > 10) {
+    if (selectedCountry) {
+      setSelectedCountry();
+    }
     return (
       <div>
         Too many matches, specify another filter!
@@ -84,6 +87,9 @@ const Countries = ({countries}) => {
     )
   }
 
+  if (selectedCountry) {
+    setSelectedCountry();
+  }
   return (
     <div>
       {countries.map(country => <Country country={country} key={country.name} />)}
