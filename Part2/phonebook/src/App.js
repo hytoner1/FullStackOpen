@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from 'react'
-import axios from 'axios'
 
 import Persons from "./components/Persons"
 import AddPerson from "./components/Form_addNew"
 import Filter from "./components/Filter"
 
+import personService from './services/persons'
 
 const App = () => {
   // #region States
@@ -18,12 +18,11 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect');
-    axios
-      .get('http://localhost:3001/persons')
+    personService.getAll()
       .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+        console.log('promise fulfilled');
+        setPersons(response.data);
+      });
   }, []);
 
 
@@ -41,8 +40,13 @@ const App = () => {
       number: newNumber
     };
 
-    setPersons(persons.concat(personObj))
-    setNewName('')
+    personService.create(personObj)
+      .then(response => {
+        setPersons(persons.concat(response.data));
+        setNewName('');
+      });
+
+    
     setNewNumber('01-02-')
   };
 
