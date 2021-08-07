@@ -2,12 +2,31 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+/.vs
+
+/Part0/.vs
+
+
+/Part1/.vs
+
 /Part1/anecdotes/.vs
 /Part1/anecdotes/node_modules
+
 /Part1/courseinfo/.vs
 /Part1/courseinfo/node_modules
+
 /Part1/unicafe/.vs
 /Part1/unicafe/node_modules
-/Part1/.vs
-/.vs
-/Part0/.vs
+
+
+/Part2/.vs
+
+/Part2/courseinfo/.vs
+/Part2/courseinfo/node_modules
+
+/Part2/phonebook/.vs
+/Part2/phonebook/node_modules
+
+/Part2/countries/.vs
+/Part2/countries/node_modules
+/Part2/countries/.env
