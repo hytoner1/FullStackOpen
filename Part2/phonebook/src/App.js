@@ -3,12 +3,14 @@ import React, {useState, useEffect} from 'react'
 import Persons from "./components/Persons"
 import AddPerson from "./components/Form_addNew"
 import Filter from "./components/Filter"
+import Notification from "./components/Notification"
 
 import personService from './services/persons'
 
 const App = () => {
   // #region States
   const [persons, setPersons] = useState([]);
+  const [notification, setNotification] = useState(null);
 
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('01-02-');
@@ -53,7 +55,11 @@ const App = () => {
       const personObj = {name: newName, number: newNumber}
       personService.create(personObj)
         .then(response => {
-          setPersons(persons.concat(response.data))
+          setPersons(persons.concat(response.data));
+          setNotification('Added ' + response.data.name);
+          setTimeout(() => {
+              setNotification(null);
+            }, 2000);
         })
     };
 
@@ -96,6 +102,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Filter filter={filter} onChange={handleFilterChange} />
 
       <h2>Add new</h2>
