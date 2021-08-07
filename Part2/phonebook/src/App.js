@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react'
 import Persons from "./components/Persons"
 import AddPerson from "./components/Form_addNew"
 import Filter from "./components/Filter"
-import Notification from "./components/Notification"
+import Notifications from "./components/Notification"
 
 import personService from './services/persons'
 
@@ -11,6 +11,7 @@ const App = () => {
   // #region States
   const [persons, setPersons] = useState([]);
   const [notification, setNotification] = useState(null);
+  const [errorNotification, setErrorNotification] = useState(null);
 
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('01-02-');
@@ -32,7 +33,9 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
+    // Find if the person already exists
     if (persons.map(person => person.name.toLowerCase()).includes(newName.toLowerCase())) {
+      // Do we want to update the number
       if (!window.confirm('"' + newName +
             '" is already in the phonebook! Do you want to replace the old number with the new one?')) {
         setNewName('')
@@ -43,12 +46,25 @@ const App = () => {
       const personObj = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
       personObj.number = newNumber;
 
-      personService.update(personObj)
+      personService
+        .update(personObj)
         .then(response => {
           personService.getAll()
             .then(response => {
               setPersons(response.data);
             });
+        })
+        .catch(error => {
+          setErrorNotification(
+            'Information of "' + personObj.name + '" has already been removed from server'
+          );
+          personService.getAll()
+            .then(response => {
+              setPersons(response.data);
+            });
+          setTimeout(() => {
+              setErrorNotification(null)
+            }, 5000);
         });
     }
     else {
@@ -59,7 +75,7 @@ const App = () => {
           setNotification('Added ' + response.data.name);
           setTimeout(() => {
               setNotification(null);
-            }, 2000);
+            }, 5000);
         })
     };
 
@@ -102,7 +118,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notifications.Notification message={notification} />
+      <Notifications.ErrorNotification message={errorNotification} />
       <Filter filter={filter} onChange={handleFilterChange} />
 
       <h2>Add new</h2>
