@@ -10,7 +10,15 @@ const create = (newObject) => {
 }
 
 const update = (id, newObject) => {
+  console.log('update: ', id, newObject);
   return axios.put(baseUrl + '/' + id, newObject);
 }
 
-export default {getAll, create, update}
+const deleteEntry = (id) => {
+  console.log('deleteEntry', id);
+  return axios
+    .delete(baseUrl + '/' + id);
+}
+
+const exports = { getAll, create, update, deleteEntry };
+export default exports;
