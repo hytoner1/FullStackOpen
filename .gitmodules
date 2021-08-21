@@ -1,3 +1,6 @@
 [submodule "Part3/PhonebookWeb"]
 	path = Part3/PhonebookWeb
 	url = https://github.com/hytoner1/FullStackOpen-PhonebookWeb.git
+[submodule "Part4/FullStackOpen-Blogs"]
+	path = Part4/FullStackOpen-Blogs
+	url = https://github.com/hytoner1/FullStackOpen-Blogs.git
