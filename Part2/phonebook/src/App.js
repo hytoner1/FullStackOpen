@@ -20,13 +20,13 @@ const App = () => {
   // #endregion States
 
   useEffect(() => {
-      console.log('effect');
-      personService.getAll()
-        .then(response => {
-          console.log('promise fulfilled');
-          setPersons(response.data);
-        });
-    },
+    console.log('effect');
+    personService.getAll()
+      .then(response => {
+        console.log('promise fulfilled');
+        setPersons(response.data);
+      });
+  },
     []);
 
 
@@ -37,22 +37,22 @@ const App = () => {
     if (persons.map(person => person.name.toLowerCase()).includes(newName.toLowerCase())) {
       // Do we want to update the number
       if (!window.confirm('"' + newName +
-            '" is already in the phonebook! Do you want to replace the old number with the new one?')) {
+        '" is already in the phonebook! Do you want to replace the old number with the new one?')) {
         setNewName('')
         setNewNumber('01-02-');
         return;
       }
 
-      const personObj = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
-      personObj.number = newNumber;
+      const existingPersonObj = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
+      const personObj = {name: newName, number: newNumber}
 
       personService
-        .update(personObj)
+        .update(existingPersonObj.id, personObj)
         .then(response => {
           personService.getAll()
             .then(response => {
               setPersons(response.data);
-            });
+            })
         })
         .catch(error => {
           setErrorNotification(
@@ -63,19 +63,26 @@ const App = () => {
               setPersons(response.data);
             });
           setTimeout(() => {
-              setErrorNotification(null)
-            }, 5000);
+            setErrorNotification(null)
+          }, 5000);
         });
     }
-    else {
+    else { // Create fully new entry
       const personObj = {name: newName, number: newNumber}
       personService.create(personObj)
         .then(response => {
           setPersons(persons.concat(response.data));
           setNotification('Added ' + response.data.name);
           setTimeout(() => {
-              setNotification(null);
-            }, 5000);
+            setNotification(null);
+          }, 5000);
+        })
+        .catch(err => {
+          console.log('Create Person error', err.response.data.error);
+          setErrorNotification(err.response.data.error);
+          setTimeout(() => {
+            setErrorNotification(null);
+          }, 5000);
         })
     };
 
@@ -126,7 +133,7 @@ const App = () => {
       <AddPerson addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
 
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} handleDelete={handleDelete}/>
+      <Persons persons={personsToShow} handleDelete={handleDelete} />
 
     </div>
   )

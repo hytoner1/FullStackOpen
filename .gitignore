@@ -30,3 +30,14 @@
 /Part2/countries/.vs
 /Part2/countries/node_modules
 /Part2/countries/.env
+
+/Part2/phonebook/build
+
+
+/Part3/.vs
+
+/Part3/PhonebookWeb/.vs
+/Part3/PhonebookWeb/node_modules
+
+
+/Part3/phonebookWeb_old
