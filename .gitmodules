@@ -4,3 +4,6 @@
 [submodule "Part4/FullStackOpen-Blogs"]
 	path = Part4/FullStackOpen-Blogs
 	url = https://github.com/hytoner1/FullStackOpen-Blogs.git
+[submodule "Part5/FullStackOpen-Blogs-Front"]
+	path = Part5/FullStackOpen-Blogs-Front
+	url = https://github.com/hytoner1/FullStackOpen-Blogs-Front.git
