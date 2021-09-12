@@ -7,3 +7,6 @@
 [submodule "Part5/FullStackOpen-Blogs-Front"]
 	path = Part5/FullStackOpen-Blogs-Front
 	url = https://github.com/hytoner1/FullStackOpen-Blogs-Front.git
+[submodule "Part6/FullStackOpen-UnicafeRedux"]
+	path = Part6/FullStackOpen-UnicafeRedux
+	url = https://github.com/hytoner1/FullStackOpen-UnicafeRedux.git
