@@ -39,9 +39,13 @@
 /Part3/PhonebookWeb/.vs
 /Part3/PhonebookWeb/node_modules
 
-
 /Part3/phonebookWeb_old
 
 
+/Part6/.vs
+
 /Part6/UnicafeRedux/.vs
 /Part6/UnicafeRedux/node_modules
+
+/Part6/AnecdotesRedux/.vs
+/Part6/AnecdotesRedux/node_modules
