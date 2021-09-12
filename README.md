@@ -7,4 +7,4 @@
 * **Part 2** - Done
 * **Part 3** - Done, see https://github.com/hytoner1/FullStackOpen-PhonebookWeb
 * **Part 4** - Done, see https://github.com/hytoner1/FullStackOpen-Blogs
-* **Part 5** - In Progress, see https://github.com/hytoner1/FullStackOpen-Blogs-Front
+* **Part 5** - Done, see https://github.com/hytoner1/FullStackOpen-Blogs-Front
