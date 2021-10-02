@@ -12,17 +12,21 @@ const asObject = (content) => {
   };
 };
 
-
 const getAll = async () => {
   const response = await axios.get(baseUrl);
   return response.data;
 };
 
-const createNew = async (content) => {
-  console.log('createNew', content);
-  const object = asObject(content);
+const createNew = async (text) => {
+  console.log('createNew', text);
+  const object = asObject(text);
   const response = await axios.post(baseUrl, object);
   return response.data;
 };
 
-export default {getAll, createNew};
+const update = async (id, newObj) => {
+  const res = await axios.put(baseUrl + '/' + id, newObj);
+  return res.data;
+};
+
+export default {getAll, createNew, update};
