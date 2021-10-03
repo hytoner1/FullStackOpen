@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
-  BrowserRouter as Router,
-  Switch, Route, Link, useParams
+  Switch, Route, Link,
+  useParams, useHistory, useRouteMatch
 } from 'react-router-dom';
 
 const Menu = () => {
@@ -18,9 +18,26 @@ const Menu = () => {
   );
 };
 
-const Anecdote = ({anecdotes}) => {
-  const id = useParams().id;
-  const anecdote = anecdotes.find(a => a.id === id);
+const Notification = ({notification}) => {
+  if (notification === '') {
+    return (
+      <div/>
+    );
+  }
+  
+  return (
+    <div>
+      {notification}
+    </div>
+  );
+};
+
+const Anecdote = ({anecdote}) => {
+  if (anecdote === null) {
+    return (
+      <div/>
+    );
+  }
 
   return (
     <div>
@@ -29,7 +46,7 @@ const Anecdote = ({anecdotes}) => {
   );
 };
 
-const AnecdoteList = ({ anecdotes }) => {
+const AnecdoteList = ({anecdotes}) => {
   return (
     <div>
       <h2>Anecdotes</h2>
@@ -73,9 +90,12 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('');
   const [info, setInfo] = useState('');
 
+  const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    history.push('/');
+
     props.addNew({
       content,
       author,
@@ -124,12 +144,25 @@ const App = () => {
     }
   ]);
 
-  //const [notification, setNotification] = useState('');
+  const [notification, setNotification] = useState('');
 
+  let timeoutId = 1;
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0);
+
+    clearTimeout(timeoutId);
+    setNotification(`New Anecdote Created: '${anecdote.content}'`);
+    timeoutId = setTimeout(() => {
+      setNotification('');
+    }, 10000);
+
     setAnecdotes(anecdotes.concat(anecdote));
   };
+
+  const match = useRouteMatch('/anecdotes/:id');
+  const anecdote = match
+    ? anecdotes.find(a => a.id === match.params.id)
+    : null;
 
   //const vote = (id) => {
   //  const anecdote = anecdoteById(id);
@@ -145,24 +178,24 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Router>
-        <Menu />
+      <Menu />
 
-        <Switch>
-          <Route path='/anecdotes/:id'>
-            <Anecdote anecdotes={anecdotes} />
-          </Route>
-          <Route path='/createnew'>
-            <CreateNew addNew={addNew} />
-          </Route>
-          <Route path='/about'>
-            <About />
-          </Route>
-          <Route path='/'>
-            <AnecdoteList anecdotes={anecdotes} />
-          </Route>
-        </Switch>
-      </Router>
+      <Notification notification={notification}/>
+
+      <Switch>
+        <Route path='/anecdotes/:id'>
+          <Anecdote anecdote={anecdote} />
+        </Route>
+        <Route path='/createnew'>
+          <CreateNew addNew={addNew} />
+        </Route>
+        <Route path='/about'>
+          <About />
+        </Route>
+        <Route path='/'>
+          <AnecdoteList anecdotes={anecdotes} />
+        </Route>
+      </Switch>
 
       <Footer />
     </div>
