@@ -20,6 +20,11 @@ const useResource = (baseUrl) => {
   console.log('useResource');
   const [resources, setResources] = useState([]);
 
+  useEffect(() => {
+    console.log('Effect');
+    getAll();
+  }, [baseUrl]);
+
   const getAll = async () => {
     console.log('getAll');
     try {
@@ -55,12 +60,6 @@ const App = () => {
 
   const [notes, noteService] = useResource('http://localhost:3005/notes');
   const [persons, personService] = useResource('http://localhost:3005/persons');
-
-  useEffect(() => {
-    console.log('Effect');
-    noteService.getAll();
-    personService.getAll();
-  }, []);
 
   const handleNoteSubmit = (event) => {
     event.preventDefault();
