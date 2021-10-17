@@ -65,5 +65,8 @@
 
 /Part8/.vs
 
-/Part8/library/.vs
-/Part8/library/node_modules
+/Part8/library-back/.vs
+/Part8/library-back/node_modules
+
+/Part8/library-front/.vs
+/Part8/library-front/node_modules
