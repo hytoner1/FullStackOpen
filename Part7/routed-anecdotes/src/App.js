@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {
   Switch, Route, Link,
-  useParams, useHistory, useRouteMatch
+  useHistory, useRouteMatch
 } from 'react-router-dom';
 
 import {useField} from './hooks/field';
