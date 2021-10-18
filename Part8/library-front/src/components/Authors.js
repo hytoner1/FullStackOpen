@@ -44,7 +44,7 @@ const Authors = (props) => {
 
       <div>
         <h2> Set Birthyear </h2>
-        <SetAuthorBirthYear />
+        <SetAuthorBirthYear authors={authors} />
       </div>
 
     </div>

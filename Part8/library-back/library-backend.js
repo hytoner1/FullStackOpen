@@ -157,6 +157,7 @@ const resolvers = {
     },
 
     editAuthor: (root, args) => {
+      console.log('editAuthor', args);
       const authorToEdit = authors.find(a => a.name === args.name);
       if (!authorToEdit) {
         return null;
