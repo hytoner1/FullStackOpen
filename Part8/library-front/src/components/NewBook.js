@@ -73,7 +73,7 @@ const NewBook = (props) => {
         </div>
         <button type='submit'>create book</button>
       </form>
-    </div>
+  </div>
   )
 }
 
