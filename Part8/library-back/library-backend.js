@@ -98,7 +98,7 @@ const typeDefs = gql`
   type Book {
     title: String!,
     author: String!,
-    published: Int!,
+    published: Int,
     genres: [String!]!
   }
 
@@ -146,6 +146,7 @@ const resolvers = {
   Mutation: {
     addBook: (root, args) => {
       const book = { ...args };
+      console.log(book);
       books = books.concat(book);
 
       if (!authors.map(a => a.name).includes(args.author)) {
