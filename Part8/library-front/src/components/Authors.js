@@ -42,10 +42,14 @@ const Authors = (props) => {
         </tbody>
       </table>
 
-      <div>
-        <h2> Set Birthyear </h2>
-        <SetAuthorBirthYear authors={authors} />
-      </div>
+      {props.token
+        ? <div>
+          <h2> Set Birthyear </h2>
+          <SetAuthorBirthYear authors={authors} />
+          </div>
+        : null
+      }
+      
 
     </div>
   );
