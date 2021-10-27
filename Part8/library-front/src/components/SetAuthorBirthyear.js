@@ -24,7 +24,7 @@ const SetAuthorBirthear = ({ authors }) => {
       <form onSubmit={submit}>
         <div>
           name
-          <select value={''} onChange={({ target }) => setName(target.value)}>
+          <select value={name} onChange={({ target }) => setName(target.value)}>
             <option value={''} key=''></option>
             {authors.map(a =>
               <option value={a.name} key={a.name}>{a.name}</option>

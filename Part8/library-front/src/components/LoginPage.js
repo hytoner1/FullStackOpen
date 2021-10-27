@@ -18,13 +18,14 @@ const LoginPage = (props) => {
       const token = result.data.login.value
       props.setToken(token)
       localStorage.setItem('library-user-token', token)
+      props.setPage('authors');
     }
   }, [result.data]) // eslint-disable-line
 
   const submit = async (event) => {
     event.preventDefault()
 
-    login({ variables: { username, password } })
+    login({ variables: { username, password } });
     setUsername('');
     setPassword('');
   }

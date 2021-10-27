@@ -50,6 +50,7 @@ const App = () => {
       <LoginPage
         show={page === 'login'}
         setToken={setToken}
+        setPage={setPage}
       />
     </div>
   )

@@ -54,16 +54,11 @@ const typeDefs = gql`
     me: User
   }
 
-  input AuthorIn {
-    name: String!
-    born: Int
-  }
-
   type Mutation {
     addBook(
       title: String!
-      author: AuthorIn!
-      published: Int!
+      author: String!
+      published: Int
       genres: [String!]!
     ): Book,
 
@@ -88,7 +83,7 @@ const resolvers = {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      if(args.author) {
+      if (args.author) {
         const author = await Author.findOne({ name: args.author.toLowerCase() });
         if (!author) {
           return null;
@@ -102,7 +97,7 @@ const resolvers = {
       if (args.genre) {
         return await Book.find({ genres: { $in: [args.genre] } }).populate('author');
       }
-      
+
       return Book.find({}).populate('author');
     },
     allAuthors: async () => await Author.find({}),
@@ -134,9 +129,9 @@ const resolvers = {
         throw new UserInputError('Book with given title already exists', { invalidArgs: args.title });
       }
 
-      let author = await Author.findOne({ name: args.author.name.toLowerCase() });
+      let author = await Author.findOne({ name: args.author.toLowerCase() });
       if (!author) {
-        const newAuthor = new Author({ ...args.author, name: args.author.name.toLowerCase() });
+        const newAuthor = new Author({ name: args.author.toLowerCase() });
         try {
           author = await newAuthor.save()
         } catch (e) {
@@ -165,8 +160,16 @@ const resolvers = {
         return null;
       }
 
-      author.born = args.born;
-      return author.save();
+      try {
+        //const asd = await author.updateOne({ _id: author._id }, { $set: { born: args.born } });
+        author.born = args.born;
+        await author.save();
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
+      return author;
     },
 
     createUser: async (root, args) => {
