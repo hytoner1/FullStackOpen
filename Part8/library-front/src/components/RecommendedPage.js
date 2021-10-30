@@ -6,8 +6,7 @@ import { ALL_BOOKS, ME } from '../queries'
 const RecommendedPage = (props) => {
   const userResult = useQuery(ME);
   const booksResult = useQuery(ALL_BOOKS, {
-    skip: !userResult.data.favoriteGenre,
-    variables: { genre: userResult.data.favoriteGenre }
+    variables: { /*genre: userResult.data.favoriteGenre*/ }
   });
   //const [getAllBooks, { booksResult }] = useLazyQuery(ALL_BOOKS);
 //  const booksQuery = useLazyQuery(ALL_BOOKS, );
