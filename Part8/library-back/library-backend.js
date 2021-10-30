@@ -39,6 +39,7 @@ const typeDefs = gql`
 
   type User {
     username: String!
+    favoriteGenre: String!
     id: ID!
   }
 
@@ -69,6 +70,7 @@ const typeDefs = gql`
 
     createUser(
       username: String!
+      favoriteGenre: String!
     ): User
 
     login(
@@ -173,7 +175,7 @@ const resolvers = {
     },
 
     createUser: async (root, args) => {
-      const user = new User({ username: args.username });
+      const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre });
 
       try {
         return await user.save();
@@ -191,6 +193,7 @@ const resolvers = {
 
       const userForToken = {
         username: user.username,
+        favoriteGenre: user.favoriteGenre,
         id: user._id
       }
 
