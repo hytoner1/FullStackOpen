@@ -10,4 +10,5 @@
 * **Part 5** - Done, see https://github.com/hytoner1/FullStackOpen-Blogs-Front
 * **Part 6** - Done
 * **Part 7** - Done
-* **Part 8** - WIP
+* **Part 8** - Done
+* **Part 9** - WIP
