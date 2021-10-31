@@ -10,7 +10,7 @@ interface Result {
 
 type Explanation = 'Lazy' | 'Good' | 'Great';
 
-const evaluateExercise = (exHours: Array<number>, target: number) : Result => {
+export const evaluateExercise = (exHours : Array<number>, target : number) : Result => {
   if (exHours.some(x => isNaN(x))) throw new Error('exHours contains NaN(s)');
 
   const nDays = exHours.length;
@@ -21,19 +21,19 @@ const evaluateExercise = (exHours: Array<number>, target: number) : Result => {
   const targetReached = calculatedAvgTime >= target;
 
   const rating = 1 + (nTrainingDays > nDays / 2 ? 1 : 0) + (calculatedAvgTime > 0.5 ? 1 : 0);
-  let explanation: Explanation = 'Lazy';
+  let explanation : Explanation = 'Lazy';
   if (rating > 2) {
     explanation = 'Great';
   } else if (rating > 1) {
-    explanation = 'Good'
+    explanation = 'Good';
   }
 
   return {
     nDays, nTrainingDays, target, calculatedAvgTime, targetReached, rating, explanation
-  }
-}
+  };
+};
 
-const exerciseHours = process.argv.slice(2, -1).map(x => Number(x));
-const target = Number(process.argv.slice(-1));
+//const exerciseHours = process.argv.slice(2, -1).map(x => Number(x));
+//const target = Number(process.argv.slice(-1));
 
-console.log(evaluateExercise(exerciseHours, target));
+//console.log(evaluateExercise(exerciseHours, target));

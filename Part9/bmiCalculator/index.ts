@@ -1,7 +1,11 @@
 import express = require('express');
 const app = express();
+app.use(express.json());
+
+import { isArray } from 'node:util';
 
 import { calculateBmi } from './bmiCalculator';
+import { evaluateExercise } from './exerciseCalculator';
 
 
 app.get('/hello', (_req, res) => {
@@ -22,6 +26,26 @@ app.get('/bmi', (req, res) => {
     bmi: resStr
   });
 });
+
+app.post('/exercises', (req, res) => {
+  console.log('exercises:', req.body);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+  const { daily_exercises, target }: any = req.body;
+
+  if (!daily_exercises || !target) {
+    res.send({ error: "parameters missing" });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+  if (!isArray(daily_exercises) || daily_exercises.map((x : string) => Number(x)).some((x : number) => isNaN(x)) || isNaN(Number(target))) {
+    res.send({ error: "malformatted parameter(s)" });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const result = evaluateExercise(daily_exercises, target);
+  res.send(result);
+});
+
 
 const PORT = 3003;
 
