@@ -62,6 +62,7 @@ const App = () => {
 
       <RecommendedPage
         show={page === 'recommended'}
+        client={client}
       />
 
       <LoginPage

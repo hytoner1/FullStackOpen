@@ -16,6 +16,9 @@ const RecommendedPage = (props) => {
   if (!props.show) {
     return null
   }
+  else {
+    props.client.refetchQueries({ include: [ALL_BOOKS] });
+  }
 
   if (userResult.loading || booksResult.loading) {
     return <div>Loading...</div>;
