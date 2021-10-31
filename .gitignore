@@ -77,3 +77,9 @@
 
 /Part9/bmiCalculator/.vs
 /Part9/bmiCalculator/node_modules
+
+/Part9/patientor/front/.vs
+/Part9/patientor/front/node_modules
+
+/Part9/patientor/back/.vs
+/Part9/patientor/back/node_modules
