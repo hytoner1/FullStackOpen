@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { useLazyQuery, useQuery } from '@apollo/client';
+import React from 'react'
+import { useQuery } from '@apollo/client';
 
 import { ALL_BOOKS, ME } from '../queries'
 

@@ -1,13 +1,34 @@
-import React, { useEffect } from 'react'
-import { useLazyQuery, useQuery } from '@apollo/client';
+import React from 'react'
+import { useLazyQuery, useSubscription } from '@apollo/client';
 
-import { ALL_BOOKS } from '../queries'
+import { ALL_BOOKS, BOOK_ADDED } from '../queries'
 
 const Books = (props) => {
   const [getAllBooks, { loading, error, data }] = useLazyQuery(ALL_BOOKS);
-  console.log('Loading:', loading);
-  console.log('Error:', error);
-  console.log('Data:', data);
+
+  const updateCacheWith = (addedBook) => {
+    const includedIn = (set, object) => {
+      set.map(p => p.id).includes(object.id);
+    }
+
+    const dataInStore = data?.allBooks;//client.readQuery({ query: ALL_BOOKS });
+    console.log('datainstore:', dataInStore);
+    if (!includedIn(dataInStore, addedBook)) {
+      props.client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks: dataInStore.concat(addedBook) }
+      });
+    }
+  }
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded;
+      window.alert(`New book added: ${addedBook.title}!`)
+      updateCacheWith(addedBook);
+    }
+  })
+
 
   if (!props.show) {
     return null

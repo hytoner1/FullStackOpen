@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useApolloClient, useSubscription } from '@apollo/client';
-
-import { BOOK_ADDED } from './queries'
+import { useApolloClient } from '@apollo/client';
 
 import Authors from './components/Authors';
 import Books from './components/Books';
@@ -21,12 +19,6 @@ const App = () => {
       setToken(storedToken);
     }
   }, []);
-
-  useSubscription(BOOK_ADDED, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      window.alert(`New book added: ${subscriptionData.data.bookAdded.title}!`)
-    }
-  })
 
   return (
     <div>
@@ -60,9 +52,10 @@ const App = () => {
         show={page === 'authors'}
         token={token}
       />
-
+       
       <Books
         show={page === 'books'}
+        client={client}
       />
 
       <NewBook
