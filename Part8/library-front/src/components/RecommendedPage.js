@@ -5,39 +5,32 @@ import { ALL_BOOKS, ME } from '../queries'
 
 const RecommendedPage = (props) => {
   const userResult = useQuery(ME);
-  const booksResult = useQuery(ALL_BOOKS, {
-    variables: { /*genre: userResult.data.favoriteGenre*/ }
-  });
-  //const [getAllBooks, { booksResult }] = useLazyQuery(ALL_BOOKS);
-//  const booksQuery = useLazyQuery(ALL_BOOKS, );
+  const favoriteGenre = userResult.data?.me?.favoriteGenre;
+  console.log('fav genre:', favoriteGenre);
 
+  const booksResult = useQuery(ALL_BOOKS, {
+    variables: { genre: favoriteGenre },
+    fetchPolicy: "no-cache"
+  });
+  
   if (!props.show) {
     return null
   }
 
-  if (userResult.loading) {
+  if (userResult.loading || booksResult.loading) {
     return <div>Loading...</div>;
   }
 
-
-  if (userResult.loading || booksResult?.loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (userResult?.error || booksResult?.error) {
+  if (userResult.error || booksResult.error) {
     return `Error! ${userResult ? userResult.error : booksResult.error}`;
   }
 
-  const books = booksResult?.data.allBooks;
-  console.log(books);
-
-  if (!books) {
-    return null;
-  }
+  console.log('userResult:', userResult);
+  console.log('booksResult:', booksResult);
 
   return (
     <div>
-      <h2>Recommended for You</h2>
+      <h2>Recommended for You based on genre "{favoriteGenre}":</h2>
 
       <table>
         <tbody>
@@ -50,7 +43,7 @@ const RecommendedPage = (props) => {
               published
             </th>
           </tr>
-          {books.map(b =>
+          {booksResult.data?.allBooks?.map(b =>
             <tr key={b.title}>
               <td>{b.title}</td>
               <td>{b.author.name}</td>

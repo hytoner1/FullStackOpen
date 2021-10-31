@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Authors from './components/Authors';
 import Books from './components/Books';
 import NewBook from './components/NewBook';
@@ -11,6 +11,13 @@ const App = () => {
 
   const [page, setPage] = useState('authors');
   const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("library-user-token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
   return (
     <div>

@@ -91,7 +91,7 @@ const resolvers = {
           return null;
         }
         if (args.genre) {
-          return await Book.find({ author: author.id, genres: { $in: [args.genre] } }).populate('author');
+          return await Book.find({ author: author.id, genres: { $in: [args.genre.toLowerCase()] } }).populate('author');
         }
         return await Book.find({ author: author.id }).populate('author');
       }
