@@ -1,8 +1,8 @@
 import React from "react";
 
-import { ContentsProps } from '../types';
+import { CoursePartProps } from '../types';
 
-const Total = (props: ContentsProps) => {
+const Total = (props: CoursePartProps) => {
   return (
     <div>
       <p>
