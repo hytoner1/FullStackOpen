@@ -10,3 +10,9 @@ export interface PatientData {
 };
 
 export type NonSensitivePatientData = Omit<PatientData, 'ssn'>;
+
+export interface DiagnoseData {
+  code: string,
+  name: string,
+  latin?: string
+};
