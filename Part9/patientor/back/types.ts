@@ -5,11 +5,12 @@ export interface PatientData {
   name: string,
   dateOfBirth: string,
   ssn: string,
-  gender: Gender;
-  occupation: string
+  gender: Gender,
+  occupation: string,
+  entries: Entry[]
 };
 
-export type NonSensitivePatientData = Omit<PatientData, 'ssn'>;
+export type PublicPatientData = Omit<PatientData, 'ssn' | 'entries'>;
 export type NewPatientData = Omit<PatientData, 'id'>;
 
 export interface DiagnoseData {
@@ -17,3 +18,6 @@ export interface DiagnoseData {
   name: string,
   latin?: string
 };
+
+export interface Entry {
+}

@@ -5,8 +5,13 @@ import patientService from '../services/patientService';
 import toNewPatientData from '../utils';
 
 router.get('/', (_req, res) => {
-  const patients = patientService.getNonSensitivePatientDatas();
+  const patients = patientService.getPatientDatas();
   res.send(patients);
+});
+
+router.get('/:id', (req, res) => {
+  const patient = patientService.getPatientData(req.params.id);
+  patient ? res.send(patient) : res.status(404).end();
 });
 
 router.post('/', (req, res) => {
