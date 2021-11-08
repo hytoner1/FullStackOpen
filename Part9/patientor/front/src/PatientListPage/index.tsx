@@ -3,7 +3,7 @@ import axios from "axios";
 import { Container, Table, Button } from "semantic-ui-react";
 
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
-import AddPatientModal from "../AddPatientModal";
+import { AddPatientModal, PatientInfoModal } from "../AddPatientModal";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
@@ -12,14 +12,23 @@ import { useStateValue } from "../state";
 const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
 
+  const [selectedPatient, setSelectedPatient] = React.useState<string | undefined>();
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [infoModalOpen, setInfoModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | undefined>();
 
-  const openModal = (): void => setModalOpen(true);
+  const openModal = () : void => setModalOpen(true);
+  const openInfoModal = (patient : string) : void => { setInfoModalOpen(true); setSelectedPatient(patient); };
 
   const closeModal = (): void => {
     setModalOpen(false);
     setError(undefined);
+  };
+
+  const closeInfoModal = () : void => {
+    setInfoModalOpen(false);
+    setError(undefined);
+    setSelectedPatient(undefined);
   };
 
   const submitNewPatient = async (values: PatientFormValues) => {
@@ -53,7 +62,11 @@ const PatientListPage = () => {
         <Table.Body>
           {Object.values(patients).map((patient: Patient) => (
             <Table.Row key={patient.id}>
-              <Table.Cell>{patient.name}</Table.Cell>
+              <Table.Cell>
+                <button onClick={() => openInfoModal(patient.id)}>
+                  {patient.name}
+                  </button>
+              </Table.Cell>
               <Table.Cell>{patient.gender}</Table.Cell>
               <Table.Cell>{patient.occupation}</Table.Cell>
               <Table.Cell>
@@ -68,6 +81,11 @@ const PatientListPage = () => {
         onSubmit={submitNewPatient}
         error={error}
         onClose={closeModal}
+      />
+      <PatientInfoModal
+        selectedPatient={selectedPatient}
+        modalOpen={infoModalOpen}
+        onClose={closeInfoModal}
       />
       <Button onClick={() => openModal()}>Add New Patient</Button>
     </div>
