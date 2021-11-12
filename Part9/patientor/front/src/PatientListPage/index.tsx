@@ -1,6 +1,9 @@
 import React from "react";
 import axios from "axios";
 import { Container, Table, Button } from "semantic-ui-react";
+import {
+  Link
+} from 'react-router-dom';
 
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import { AddPatientModal, PatientInfoModal } from "../AddPatientModal";
@@ -18,7 +21,7 @@ const PatientListPage = () => {
   const [error, setError] = React.useState<string | undefined>();
 
   const openModal = () : void => setModalOpen(true);
-  const openInfoModal = (patient : string) : void => { setInfoModalOpen(true); setSelectedPatient(patient); };
+  //const openInfoModal = (patient : string) : void => { setInfoModalOpen(true); setSelectedPatient(patient); };
 
   const closeModal = (): void => {
     setModalOpen(false);
@@ -63,9 +66,9 @@ const PatientListPage = () => {
           {Object.values(patients).map((patient: Patient) => (
             <Table.Row key={patient.id}>
               <Table.Cell>
-                <button onClick={() => openInfoModal(patient.id)}>
+                <Link to={`/patients/${patient.id}`}>
                   {patient.name}
-                  </button>
+                </Link>
               </Table.Cell>
               <Table.Cell>{patient.gender}</Table.Cell>
               <Table.Cell>{patient.occupation}</Table.Cell>

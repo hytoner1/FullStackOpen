@@ -5,7 +5,7 @@ import patientService from '../services/patientService';
 import toNewPatientData from '../utils';
 
 router.get('/', (_req, res) => {
-  const patients = patientService.getPatientDatas();
+  const patients = patientService.getPublicPatientDatas();
   res.send(patients);
 });
 
