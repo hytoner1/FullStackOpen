@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import axios from "axios";
-import { Icon } from 'semantic-ui-react';
+import { Container, Icon } from 'semantic-ui-react';
 import {
   useParams
 } from "react-router-dom";
+
+import { HospitalEntry } from "../components/EntryCards";
 
 import { apiBaseUrl } from "../constants";
 import { Diagnosis, Entry, Patient } from "../types";
@@ -55,28 +57,29 @@ const PatientInfoPage = () => {
 
   console.log('List:', diagnosisList);
 
-  const EntryBox = (e : Entry) => {
-  //  const DiagnosisListItem = (diagnosisCode: string) => {
-  //    return (
-
-  //    );
-  //  };
-
-    return (
-      <div key={e.id}>
-        <b> {e.date}: </b>
-        {e.description}
-        <ul>
-          {e.diagnosisCodes && e.diagnosisCodes.map(d =>
-            <li key={d}>{d}: {diagnosisList.find(diagnosis => diagnosis.code === d)?.name}</li>
-          )}
-        </ul>
-      </div>
+  const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`
     );
   };
 
+  const EntryBox : React.FC<{ e : Entry }> = ({ e }) => {
+    switch ( e.type ) {
+      case "Hospital":
+        return <HospitalEntry e={e} diagnosisList={diagnosisList} />;
+      case "OccupationalHealthcare":
+        //  return OccupationalEntry(e, diagnosisList);
+        return <HospitalEntry e={e} diagnosisList={diagnosisList} />;
+      case "HealthCheck":
+        //  return HealthCheckEntry(e, diagnosisList);
+        return <HospitalEntry e={e} diagnosisList={diagnosisList} />;
+      default:
+        return assertNever(e);
+    }
+  };
+
   return (
-    <div>
+    <Container>
       <h2> {patient.name} {" "} <Icon name={patient.gender === Gender.Male ? "mars" : "venus"} /></h2>
       <p>
         SSN: {patient?.ssn}
@@ -85,8 +88,8 @@ const PatientInfoPage = () => {
       </p>
 
       <h3>Entries</h3>
-      { patient.entries.map(e => EntryBox(e)) }
-    </div>
+      {patient.entries.map(e => EntryBox({ e })) }
+    </Container>
   );
 };
 
