@@ -1,6 +1,9 @@
 import patients from '../data/patients';
 
-import { PatientData, PublicPatientData, NewPatientData } from '../types';
+import {
+  PatientData, PublicPatientData, NewPatientData,
+  NewEntry, Entry
+} from '../types';
 
 const { v1: uuid } = require('uuid');
 
@@ -27,9 +30,19 @@ const addPatient = (entry : NewPatientData) : PatientData => {
   return newPatient;
 };
 
+const addEntry = (patient : PatientData, newEntry : NewEntry) : PatientData => {
+  const entry : Entry = { ...newEntry, id: uuid() };
+  const modifiedPatient = { ...patient, entries: patient.entries.concat(entry) };
+
+  patients.map(p => p.id === patient.id ? modifiedPatient : p);
+
+  return modifiedPatient;
+}
+
 export default {
   getPatientData,
   getPatientDatas,
   getPublicPatientDatas,
-  addPatient
+  addPatient,
+  addEntry
 };

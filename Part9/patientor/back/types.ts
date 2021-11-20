@@ -20,7 +20,8 @@ export interface DiagnoseData {
 };
 
 interface BaseEntry {
-  id: string;
+  id : string;
+  type : EntryType;
   description: string;
   date: string;
   specialist: string;
@@ -34,13 +35,13 @@ export enum HealthCheckRating {
   "CriticalRisk" = 3
 }
 
-interface Discharge {
+export interface Discharge {
   date: string;
   criteria: string;
 }
 
 interface HospitalEntry extends BaseEntry {
-  type: "Hospital";
+  type: EntryType.Hospital;
   discharge: Discharge;
 }
 
@@ -50,13 +51,13 @@ interface SickLeave {
 }
 
 interface OccupationalHealthCareEntry extends BaseEntry {
-  type: "OccupationalHealthcare";
+  type: EntryType.OccupationalHealthCare;
   sickLeave?: SickLeave;
   employerName: string;
 }
 
 interface HealthCheckEntry extends BaseEntry {
-  type: "HealthCheck";
+  type: EntryType.HealthCheck;
   healthCheckRating: HealthCheckRating;
 }
 
@@ -64,3 +65,16 @@ export type Entry =
   | HospitalEntry
   | HealthCheckEntry
   | OccupationalHealthCareEntry;
+
+export enum EntryType {
+  HealthCheck = "HealthCheck",
+  OccupationalHealthCare = "OccupationalHealthcare",
+  Hospital = "Hospital"
+}
+
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+type DistributiveOmit<T, K extends keyof any> = T extends any
+  ? Omit<T, K>
+  : never;
+export type NewEntry = DistributiveOmit<Entry, 'id'>;
+export type NewBaseEntry = Omit<BaseEntry, 'id'>;
