@@ -5,7 +5,7 @@ import {
   useParams
 } from "react-router-dom";
 
-import { HospitalEntry } from "../components/EntryCards";
+import { HospitalEntryCard, OccupationalEntryCard, HealthCheckEntryCard } from "../components/EntryCards";
 
 import { apiBaseUrl } from "../constants";
 import { Diagnosis, Entry, Patient } from "../types";
@@ -66,13 +66,11 @@ const PatientInfoPage = () => {
   const EntryBox : React.FC<{ e : Entry }> = ({ e }) => {
     switch ( e.type ) {
       case "Hospital":
-        return <HospitalEntry e={e} diagnosisList={diagnosisList} />;
+        return <HospitalEntryCard e={e} diagnosisList={diagnosisList} />;
       case "OccupationalHealthcare":
-        //  return OccupationalEntry(e, diagnosisList);
-        return <HospitalEntry e={e} diagnosisList={diagnosisList} />;
+        return <OccupationalEntryCard e={e} diagnosisList={diagnosisList} />;
       case "HealthCheck":
-        //  return HealthCheckEntry(e, diagnosisList);
-        return <HospitalEntry e={e} diagnosisList={diagnosisList} />;
+        return <HealthCheckEntryCard e={e} diagnosisList={diagnosisList} />;
       default:
         return assertNever(e);
     }
