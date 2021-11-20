@@ -69,7 +69,7 @@ const PatientInfoPage = () => {
   const submitNewEntry = async (values : EntryFormValues) => {
     try {
       const { data: modifiedPatient } = await axios.post<Patient>(
-        `${apiBaseUrl}/${id}/entries`,
+        `${apiBaseUrl}/patients/${id}/entries`,
         values
       );
       dispatch({ type: "UPDATE_PATIENT", payload: modifiedPatient });
