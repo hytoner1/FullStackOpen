@@ -65,3 +65,4 @@ export type Entry =
   | HospitalEntry
   | HealthCheckEntry
   | OccupationalHealthCareEntry;
+

@@ -9,13 +9,15 @@ import { HospitalEntryCard, OccupationalEntryCard, HealthCheckEntryCard } from "
 
 import { apiBaseUrl } from "../constants";
 import { Diagnosis, Entry, Patient } from "../types";
+import { EntryFormValues } from "../components/AddEntryForm";
 
-import { useStateValue, updatePatient } from "../state";
+import { useStateValue, updatePatient, setDiagnoses } from "../state";
 import { Gender } from '../types';
+import AddEntryForm from '../components/AddEntryForm';
 
 const PatientInfoPage = () => {
   const { id } = useParams<{ id : string }>();
-  const [{ patients }, dispatch] = useStateValue();
+  const [{ patients, diagnoses }, dispatch] = useStateValue();
   const patient = patients[id];
   const [diagnosisList, setDiagnosisList] = useState <Array<Diagnosis>>([]);
 
@@ -27,13 +29,14 @@ const PatientInfoPage = () => {
           `${apiBaseUrl}/Diagnoses`
         );
         setDiagnosisList(diagnosisListFromApi);
+        dispatch(setDiagnoses(diagnosisListFromApi));
       } catch (e) {
         console.error(e);
       }
     };
 
     void fetchDiagnoses();
-  }, []);
+  }, [dispatch]);
 
   const fetchPatientData = async () => {
     console.log(`Fetchind data for ${id}`);
@@ -55,12 +58,24 @@ const PatientInfoPage = () => {
     void fetchPatientData();
   }
 
-  console.log('List:', diagnosisList);
+  console.log('DiagnosisList:', diagnoses);
 
   const assertNever = (value: never): never => {
     throw new Error(
       `Unhandled discriminated union member: ${JSON.stringify(value)}`
     );
+  };
+
+  const submitNewEntry = async (values : EntryFormValues) => {
+    try {
+      const { data: modifiedPatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/${id}/entries`,
+        values
+      );
+      dispatch({ type: "UPDATE_PATIENT", payload: modifiedPatient });
+    } catch (e) {
+      console.error(e.response?.data || 'Unknown Error');
+    }
   };
 
   const EntryBox : React.FC<{ e : Entry }> = ({ e }) => {
@@ -86,7 +101,10 @@ const PatientInfoPage = () => {
       </p>
 
       <h3>Entries</h3>
-      {patient.entries.map(e => EntryBox({ e })) }
+      {patient.entries.map(e => EntryBox({ e }))}
+
+      <h3>Add new entry</h3>
+      <AddEntryForm onSubmit={submitNewEntry} />
     </Container>
   );
 };
