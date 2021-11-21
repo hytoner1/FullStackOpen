@@ -166,6 +166,7 @@ const PatientInfoPage = () => {
         onChange={handleDropdownChange}
         selection
         options={visitTypes}
+        defaultValue={visitType}
       />
 
       {visitType === 'Hospital' && (
