@@ -7,16 +7,18 @@ import {
 
 const { v1: uuid } = require('uuid');
 
+let patientList = [...patients];
+
 const getPatientData = (id : string) : PatientData | undefined => {
-  return patients.find(p => p.id === id);
+  return patientList.find(p => p.id === id);
 };
 
 const getPatientDatas = (): Array<PatientData> => {
-  return patients;
+  return patientList;
 };
 
 const getPublicPatientDatas = () : PublicPatientData[] => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation, entries }) => (
+  return patientList.map(({ id, name, dateOfBirth, gender, occupation, entries }) => (
     { id, name, dateOfBirth, gender, occupation, entries }
   ));
 };
@@ -26,15 +28,17 @@ const addPatient = (entry : NewPatientData) : PatientData => {
     id: uuid(), ...entry
   };
 
-  patients.push(newPatient);
+  patientList.push(newPatient);
   return newPatient;
 };
 
 const addEntry = (patient : PatientData, newEntry : NewEntry) : PatientData => {
   const entry : Entry = { ...newEntry, id: uuid() };
   const modifiedPatient = { ...patient, entries: patient.entries.concat(entry) };
+  console.log('mod patient', modifiedPatient);
 
-  patients.map(p => p.id === patient.id ? modifiedPatient : p);
+  patientList = patientList.map(p => p.id === modifiedPatient.id ? modifiedPatient : p);
+  console.log('patients', patientList);
 
   return modifiedPatient;
 }

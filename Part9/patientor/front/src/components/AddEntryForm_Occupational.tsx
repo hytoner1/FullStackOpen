@@ -2,51 +2,49 @@ import React from "react";
 import { Grid, Button } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 
-import { DiagnosisSelection, TextField, NumberField } from "../AddPatientModal/FormField";
-import { HealthCheckRating, HealthCheckEntry,  } from "../types";
+import { DiagnosisSelection, TextField } from "../AddPatientModal/FormField";
+import { OccupationalHealthCareEntry  } from "../types";
 import { useStateValue } from '../state';
 
 /*
  * use type Patient, but omit id and entries,
  * because those are irrelevant for new patient object.
  */
-export type EntryFormValues = Omit<HealthCheckEntry, "id">;
+export type EntryFormValues_Occupational = Omit<OccupationalHealthCareEntry, "id">;
 
 interface Props {
-  onSubmit : (values : EntryFormValues) => void;
+  onSubmit : (values : EntryFormValues_Occupational) => void;
 }
 
-export const AddEntryForm = ({ onSubmit } : Props) => {
+export const AddEntryForm_Occupational = ({ onSubmit } : Props) => {
   const [{ diagnoses }] = useStateValue();
 
   return (
     <Formik
       initialValues={{
-        type: "HealthCheck",
+        type: "OccupationalHealthcare",
         description: "",
         date: "",
         specialist: "",
-        diagnosisCodes: [""],
-        healthCheckRating: HealthCheckRating.Healthy
+        diagnosisCodes: [],
+        employerName: "",
+        sickLeave: {startDate: "", endDate: "" }
       }}
       onSubmit={onSubmit}
       validate={values => {
         const requiredError = "Field is required";
         const errors : { [field : string] : string } = {};
         if (!values.description) {
-          errors.description = requiredError;
+          errors.name = requiredError;
         }
         if (!values.date) {
-          errors.date = requiredError;
-        }
-        if (!values.healthCheckRating) {
-          errors.healthCheckRating = requiredError;
+          errors.ssn = requiredError;
         }
         if (!values.specialist) {
-          errors.specialist = requiredError;
+          errors.dateOfBirth = requiredError;
         }
         if (!values.diagnosisCodes) {
-          errors.diagnosisCodes = requiredError;
+          errors.occupation = requiredError;
         }
         return errors;
       }}
@@ -73,11 +71,22 @@ export const AddEntryForm = ({ onSubmit } : Props) => {
               component={TextField}
             />
             <Field
-              label="healthCheckRating"
-              name="healthCheckRating"
-              component={NumberField}
-              min={0}
-              max={3}
+              label="employer"
+              placeholder="Employer Name"
+              name="employerName"
+              component={TextField}
+            />
+            <Field
+              label="Sickleave Start Date"
+              name="sickLeave.startDate"
+              placeholder="YYYY-MM-DD"
+              component={TextField}
+            />
+            <Field
+              label="Sickleave End Date"
+              name="sickLeave.endDate"
+              placeholder="YYYY-MM-DD"
+              component={TextField}
             />
             <DiagnosisSelection
               setFieldValue={setFieldValue}
@@ -108,4 +117,4 @@ export const AddEntryForm = ({ onSubmit } : Props) => {
   );
 };
 
-export default AddEntryForm;
+export default AddEntryForm_Occupational;
