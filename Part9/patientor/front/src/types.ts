@@ -42,7 +42,7 @@ interface Discharge {
 
 export interface HospitalEntry extends BaseEntry {
   type : "Hospital";
-  discharge : Discharge;
+  discharge: Discharge;
 }
 
 interface SickLeave {

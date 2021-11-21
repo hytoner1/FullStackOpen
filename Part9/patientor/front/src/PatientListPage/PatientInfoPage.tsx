@@ -72,6 +72,10 @@ const PatientInfoPage = () => {
   };
 
   const submitNewEntry = async (values : EntryFormValues) => {
+    if (!values.diagnosisCodes || values.diagnosisCodes.length === 0) {
+      delete values.diagnosisCodes;
+    }
+
     try {
       const { data: modifiedPatient } = await axios.post<Patient>(
         `${apiBaseUrl}/patients/${id}/entries`,
@@ -85,6 +89,10 @@ const PatientInfoPage = () => {
 
   const submitNewEntry_Hospital = async (values : EntryFormValues_Hospital) => {
     try {
+      if (!values.diagnosisCodes || values.diagnosisCodes.length === 0) {
+        delete values.diagnosisCodes;
+      }
+
       const { data: modifiedPatient } = await axios.post<Patient>(
         `${apiBaseUrl}/patients/${id}/entries`,
         values
@@ -98,6 +106,14 @@ const PatientInfoPage = () => {
   };
 
   const submitNewEntry_Occupational = async (values : EntryFormValues_Occupational) => {
+    if (!values.sickLeave || values.sickLeave.startDate === '') {
+      delete values.sickLeave;
+    }
+
+    if (!values.diagnosisCodes || values.diagnosisCodes.length === 0) {
+      delete values.diagnosisCodes;
+    }
+
     try {
       const { data: modifiedPatient } = await axios.post<Patient>(
         `${apiBaseUrl}/patients/${id}/entries`,

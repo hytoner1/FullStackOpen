@@ -34,16 +34,19 @@ export const AddEntryForm_Hospital = ({ onSubmit } : Props) => {
         const requiredError = "Field is required";
         const errors : { [field : string] : string } = {};
         if (!values.description) {
-          errors.name = requiredError;
+          errors.description = requiredError;
         }
         if (!values.date) {
-          errors.ssn = requiredError;
+          errors.date = requiredError;
         }
         if (!values.specialist) {
-          errors.dateOfBirth = requiredError;
+          errors.specialist = requiredError;
         }
-        if (!values.diagnosisCodes) {
-          errors.occupation = requiredError;
+        if (!values.discharge.criteria) {
+          errors['discharge.criteria'] = requiredError;
+        }
+        if (!values.discharge.date) {
+          errors['discharge.date'] = requiredError;
         }
         return errors;
       }}
