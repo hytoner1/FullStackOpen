@@ -7,3 +7,6 @@
 [submodule "Part5/FullStackOpen-Blogs-Front"]
 	path = Part5/FullStackOpen-Blogs-Front
 	url = https://github.com/hytoner1/FullStackOpen-Blogs-Front.git
+[submodule "Part10/FullStackOpen-ReactNative"]
+	path = Part10/FullStackOpen-ReactNative
+	url = https://github.com/hytoner1/FullStackOpen-ReactNative.git
