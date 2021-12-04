@@ -12,4 +12,4 @@
 * **Part 7** - Done
 * **Part 8** - Done
 * **Part 9** - Done
-* **Part 10 ** - WIP
+* **Part 10** - WIP
