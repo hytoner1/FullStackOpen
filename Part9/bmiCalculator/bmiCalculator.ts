@@ -20,17 +20,3 @@ export const calculateBmi = (height: number, mass: number): string => {
 
   return `How did we end up here?\n  mass: ${mass}, height: ${height}, bmi: ${bmi}`;
 };
-
-
-//const height = Number(process.argv[2]);
-//const mass = Number(process.argv[3]);
-
-//try {
-//  console.log(calculateBMI(height, mass));
-//} catch (error : unknown) {
-//  let errorMessage = 'Something went wrong.'
-//  if (error instanceof Error) {
-//    errorMessage += ' Error: ' + error.message;
-//  }
-//  console.log(errorMessage);
-//}

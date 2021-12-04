@@ -32,8 +32,3 @@ export const evaluateExercise = (exHours : Array<number>, target : number) : Res
     nDays, nTrainingDays, target, calculatedAvgTime, targetReached, rating, explanation
   };
 };
-
-//const exerciseHours = process.argv.slice(2, -1).map(x => Number(x));
-//const target = Number(process.argv.slice(-1));
-
-//console.log(evaluateExercise(exerciseHours, target));
