@@ -12,4 +12,7 @@
 * **Part 7** - Done
 * **Part 8** - Done
 * **Part 9** - Done
-* **Part 10** - WIP, see https://github.com/hytoner1/FullStackOpen-ReactNative
+* **Part 10** - Done, see https://github.com/hytoner1/FullStackOpen-ReactNative
+* **Part 11** - Done, see https://github.com/hytoner1/FullStackOpen-CICD
+* **Part 12** - Borked, see https://github.com/hytoner1/FullStackOpen-ContainersApplications
+* **Part 13** - Done, see https://github.com/hytoner1/FullStackOpen-SQL
