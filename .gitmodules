@@ -10,3 +10,15 @@
 [submodule "Part10/FullStackOpen-ReactNative"]
 	path = Part10/FullStackOpen-ReactNative
 	url = https://github.com/hytoner1/FullStackOpen-ReactNative.git
+[submodule "Part11/full-stack-open-pokedex"]
+	path = Part11/full-stack-open-pokedex
+	url = https://github.com/hytoner1/full-stack-open-pokedex.git
+[submodule "Part11/FullStackOpen-CICD"]
+	path = Part11/FullStackOpen-CICD
+	url = https://github.com/hytoner1/FullStackOpen-CICD.git
+[submodule "Part12/FullStackOpen-ContainersApplications"]
+	path = Part12/FullStackOpen-ContainersApplications
+	url = https://github.com/hytoner1/FullStackOpen-ContainersApplications.git
+[submodule "Part13/FullStackOpen-SQL"]
+	path = Part13/FullStackOpen-SQL
+	url = https://github.com/hytoner1/FullStackOpen-SQL.git
