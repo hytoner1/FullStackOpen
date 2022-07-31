@@ -89,3 +89,6 @@
 /Part10/rate-repository-api-master
 /Part10/.vs
 /Part6/AnecdotesRedux/build
+
+/IMVis/back/node_modules
+/IMVis/front/node_modules
