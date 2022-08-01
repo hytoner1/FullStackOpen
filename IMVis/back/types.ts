@@ -1,6 +1,6 @@
 export interface Patient {
   id: string;
-  image?: Image;
+  imageIds?: string[];
 };
 
 export interface Image {
