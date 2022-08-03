@@ -1,52 +1,29 @@
 import * as React from 'react';
-import ProTip from './ProTip';
 import {
-  AppBar, Box, Container,
-  Grid, IconButton, Link,
-  Toolbar, Typography
+  Box, Container, Grid, Divider,
+  Link, Typography
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}.
-    </Typography>
-  );
-}
+import TopMenu from './TopMenu';
+import ContextPane from './ContextPane';
+import MainPane from './MainPane';
+
 
 export default function App() {
   return (
-    <Container maxWidth="sm">
-      <AppBar position="static">
-        <Toolbar variant="dense">
-          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" color="inherit" component="div">
-            Toolbar
-          </Typography>
-        </Toolbar>
-      </AppBar>
+    <Container maxWidth="md">
+      <TopMenu />
 
       <Box sx={{ my: 4 }}>
         <Grid container spacing={2}>
-          <Grid item xs={2}>
-            <Typography >
-              Hello
-            </Typography>
+          <Grid item xs={3}>
+            <ContextPane />
           </Grid>
 
-          <Grid item xs={10}>
-            <Typography variant="h4" component="h1" gutterBottom>
-              Create React App example with TypeScript
-            </Typography>
-            <ProTip />
-            <Copyright />
+          <Divider orientation="vertical" flexItem sx={{mr: 1}} />
+
+          <Grid item xs={8}>
+            <MainPane />
           </Grid>
         </Grid>
       </Box>
