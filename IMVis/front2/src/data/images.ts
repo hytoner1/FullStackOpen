@@ -1,6 +1,6 @@
-import { Image } from '../types';
+import { Img } from '../types';
 
-const images: Image[] = [
+const images: Img[] = [
   {
     id: 'image1',
 
@@ -10,11 +10,11 @@ const images: Image[] = [
 
     data: [
       [
-        [0, 0, 1, 0, 0],
-        [0, 1, 1, 1, 0],
-        [1, 1, 1, 1, 1],
-        [0, 1, 1, 1, 0],
-        [0, 0, 1, 0, 0]
+        [0, 0, .25, 0, 0],
+        [0, .5, 1, .5, 0],
+        [.25, 1, 1, 1, .25],
+        [0, .5, 1, .5, 0],
+        [0, 0, .25, 0, 0]
       ]
     ],
 
@@ -23,10 +23,10 @@ const images: Image[] = [
       structures: [
         {
           id: 'structure1',
-          color: '#C5FFA1',
+          color: '#C555A1',
           contours: [
             [
-              [0, 0], [0, 1], [1, 1]
+              [0, 0], [10, 100], [100, 100]
             ]
           ]
         }

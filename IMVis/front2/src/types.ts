@@ -3,7 +3,7 @@ export interface Patient {
   imageIds?: string[];
 };
 
-export interface Image {
+export interface Img {
   id: string;
 
   xsize: number;

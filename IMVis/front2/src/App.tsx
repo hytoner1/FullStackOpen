@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {
   Box, Container, Grid, Divider,
-  Link, Typography
+  Stack, Typography
 } from '@mui/material';
 
 import TopMenu from './TopMenu';
 import ContextPane from './ContextPane';
 import MainPane from './MainPane';
+import ProTip from './ProTip';
 
 
 export default function App() {
@@ -20,10 +21,16 @@ export default function App() {
             <ContextPane />
           </Grid>
 
-          <Divider orientation="vertical" flexItem sx={{mr: 1}} />
+          <Divider orientation="vertical" flexItem sx={{ mr: 1 }} />
 
           <Grid item xs={8}>
-            <MainPane />
+            <Stack spacing={2}>
+              <MainPane />
+              <Typography variant="h4" component="h1" gutterBottom>
+                Create React App example with TypeScript
+              </Typography>
+              <ProTip />
+            </Stack>
           </Grid>
         </Grid>
       </Box>
