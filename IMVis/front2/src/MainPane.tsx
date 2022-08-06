@@ -3,8 +3,6 @@ import {
   Box
 } from '@mui/material';
 
-import ProTip from './ProTip';
-
 import patients from './data/patients';
 import images from './data/images';
 
@@ -27,9 +25,9 @@ function ImageCanvas(props: any) {
 
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
-  const styles = {
-    position: 'absolute'
-  };
+  //const styles = {
+  //  position: 'absolute'
+  //};
 
   React.useEffect(() => {
     const canvas = canvasRef?.current;
@@ -54,7 +52,7 @@ function ImageCanvas(props: any) {
   }, []);
 
   return (
-    <canvas ref={canvasRef} {...props} style={styles} />
+    <canvas ref={canvasRef} {...props} />// style={styles} />
   );
 }
 
@@ -63,9 +61,9 @@ function StructureCanvas(props: any) {
 
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
-  const styles = {
-    position: 'absolute'
-  };
+  //const styles = {
+  //  position: 'absolute'
+  //};
 
   React.useEffect(() => {
     const canvas = canvasRef?.current;
@@ -93,7 +91,7 @@ function StructureCanvas(props: any) {
   }, []);
 
   return (
-    <canvas ref={canvasRef} {...props} style={styles} />
+    <canvas ref={canvasRef} {...props} />// style={styles} />style={styles} />
   );
 }
 
@@ -101,10 +99,10 @@ export default function MainPane() {
 
   return (
     <Box>
-      <p style={{ position: 'relative' }}>
-        <ImageCanvas image={image} />
+      <ImageCanvas image={image} margin={0}/>
+      <Box sx={{m: '0', p: '0', mt: '-506px'}}>
         <StructureCanvas structures={image.structureset.structures} />
-      </p>
+      </Box>
     </Box>
   );
 }
