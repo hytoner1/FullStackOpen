@@ -22,6 +22,7 @@ export interface StructureSet {
 
 export interface Structure {
   id: string;
+  idx: number;
   color: string; // #Hex123
   contours: [number, number][][]; // (x,y) -> layer -> all layers
 };

@@ -23,6 +23,7 @@ const images: Img[] = [
       structures: [
         {
           id: 'structure1',
+          idx: 0,
           color: '#C555A1',
           contours: [
             [
@@ -32,6 +33,7 @@ const images: Img[] = [
         },
         {
           id: 'structure2',
+          idx: 1,
           color: '#A5A511',
           contours: [
             [
