@@ -50,9 +50,9 @@ function ImageCanvas(props: any) {
   );
 }
 
-function StructureCanvas(props: any) {
-  const structures: Structure[] = props.structures;
-
+function StructureCanvas({ structures, checkedList }:
+  { structures: Structure[]; checkedList: boolean[] }
+  ) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
   React.useEffect(() => {
@@ -64,7 +64,7 @@ function StructureCanvas(props: any) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       for (let structureIdx = 0; structureIdx < structures.length; structureIdx++) {
-        if (!props.checkedList[structureIdx]) {
+        if (!checkedList[structureIdx]) {
           continue;
         }
         const structure = structures[structureIdx];
@@ -82,10 +82,10 @@ function StructureCanvas(props: any) {
       }
 
     }
-  }, [props.checkedList]);
+  }, [checkedList]);
 
   return (
-    <canvas ref={canvasRef} {...props} />
+    <canvas ref={canvasRef} />
   );
 }
 
