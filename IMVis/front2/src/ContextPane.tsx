@@ -13,9 +13,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import patients from './data/patients';
 import images from './data/images';
 
-import { Structure } from './types';
-const patient = patients[0];
-const image = images[0];
+import { Structure, Patient, Img } from './types';
 
 function renderStructure(structure: Structure,
   onChange: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void) {
@@ -33,9 +31,14 @@ function renderStructure(structure: Structure,
   );
 }
 
-export default function ContextPane() {
+export default function ContextPane(
+  { patient, image, checkedList, setCheckedList }:
+  {
+      patient: Patient; image: Img;
+      checkedList: boolean[]; setCheckedList: React.Dispatch<React.SetStateAction<boolean[]>>
+  }
+) {
   const [structureListOpen, setStructureListOpen] = React.useState(true);
-  const [checkedList, setCheckedList] = React.useState(new Array(image.structureset.structures.length).fill(false));
 
   const handleClick_openStructureList = () => {
     setStructureListOpen(!structureListOpen);
@@ -89,8 +92,8 @@ export default function ContextPane() {
         <FormControlLabel label=''
           control={
             <Checkbox
-              checked={checkedList.every((x) => x === true)}
-              indeterminate={!checkedList.every((x) => x === true) && !checkedList.every((x) => x === false)}
+              checked={checkedList.every((x: boolean) => x === true)}
+              indeterminate={!checkedList.every((x: boolean) => x === true) && !checkedList.every((x: boolean) => x === false)}
               onChange={handleChange_structureSetCheckbox}
             />
           }
@@ -124,7 +127,7 @@ export default function ContextPane() {
                 checked={checkedList[structure.idx]}
                 onChange={handleChange_structureCheckbox}
                 name={`${structure.idx}`}
-                sx={{ml: 5}}
+                sx={{ ml: 5 }}
               />
 
               <ListItemButton>

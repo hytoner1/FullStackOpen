@@ -3,13 +3,7 @@ import {
   Box
 } from '@mui/material';
 
-import patients from './data/patients';
-import images from './data/images';
-
 import { Structure, Img } from './types';
-const patient = patients[0];
-const image = images[0];
-
 
 async function drawData(imData: ImageData, ctx: CanvasRenderingContext2D) {
   const resizeWidth = 500 >> 0;
@@ -61,18 +55,18 @@ function StructureCanvas(props: any) {
 
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
-  //const styles = {
-  //  position: 'absolute'
-  //};
-
   React.useEffect(() => {
     const canvas = canvasRef?.current;
     const ctx = canvas?.getContext('2d');
     if (canvas && ctx) {
       canvas.width = 500;
       canvas.height = 500;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       for (let structureIdx = 0; structureIdx < structures.length; structureIdx++) {
+        if (!props.checkedList[structureIdx]) {
+          continue;
+        }
         const structure = structures[structureIdx];
 
         ctx.strokeStyle = structure.color;
@@ -88,20 +82,23 @@ function StructureCanvas(props: any) {
       }
 
     }
-  }, []);
+  }, [props.checkedList]);
 
   return (
-    <canvas ref={canvasRef} {...props} />// style={styles} />style={styles} />
+    <canvas ref={canvasRef} {...props} />
   );
 }
 
-export default function MainPane() {
+export default function MainPane({ image, checkedList }:
+  { image: Img; checkedList: boolean[] }) {
 
   return (
     <Box>
       <ImageCanvas image={image} margin={0}/>
       <Box sx={{m: '0', p: '0', mt: '-506px'}}>
-        <StructureCanvas structures={image.structureset.structures} />
+        <StructureCanvas structures={image.structureset.structures}
+          checkedList={checkedList}
+        />
       </Box>
     </Box>
   );
