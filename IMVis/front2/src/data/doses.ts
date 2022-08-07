@@ -1,14 +1,14 @@
-import { Influence } from '../types';
+import { Dose } from '../types';
 
-const influences: Influence[] = [
+const doses: Dose[] = [
   {
-    id: 'influence1',
+    id: 'Dose1',
 
     xsize: 5,
     ysize: 5,
     zsize: 1,
 
-    data: [
+    influences: [
       [
         [2, .1],
         [7, .3],
@@ -25,4 +25,4 @@ const influences: Influence[] = [
   } // influence1
 ];
 
-export default influences;
+export default doses;

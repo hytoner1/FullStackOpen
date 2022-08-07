@@ -3,7 +3,7 @@ import {
   Box
 } from '@mui/material';
 
-import { Structure, Img, Influence } from './types';
+import { Plan, Img, Structure, Dose } from './types';
 import { PropsWithChildren } from 'react';
 
 async function drawData(imData: ImageData, ctx: CanvasRenderingContext2D) {
@@ -49,9 +49,9 @@ function ImageCanvas({ image }: PropsWithChildren<ImageCanvasProps>) {
 }
 
 interface DoseCanvasProps {
-  influence: Influence;
+  dose: Dose;
 }
-function DoseCanvas({ influence }: PropsWithChildren<DoseCanvasProps>) {
+function DoseCanvas({ dose }: PropsWithChildren<DoseCanvasProps>) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
   React.useEffect(() => {
@@ -61,22 +61,22 @@ function DoseCanvas({ influence }: PropsWithChildren<DoseCanvasProps>) {
       canvas.width = 500;
       canvas.height = 500;
 
-      const doseData: number[] = new Array(influence.ysize * influence.xsize).fill(0);
+      const doseData: number[] = new Array(dose.ysize * dose.xsize).fill(0);
       const nonZeroIdx = new Set<number>();
       let maxVal = 0;
-      for (let spotIdx = 0; spotIdx < influence.weights.length; spotIdx++) {
-        for (let i = 0; i < influence.data[spotIdx].length; i++) {
-          console.log(`${spotIdx}, ${i}, ${influence.data[spotIdx][i][1] * influence.weights[spotIdx]}`);
+      for (let spotIdx = 0; spotIdx < dose.weights.length; spotIdx++) {
+        for (let i = 0; i < dose.influences[spotIdx].length; i++) {
+          console.log(`${spotIdx}, ${i}, ${dose.influences[spotIdx][i][1] * dose.weights[spotIdx]}`);
 
-          doseData[influence.data[spotIdx][i][0]] += influence.data[spotIdx][i][1] * influence.weights[spotIdx];
-          nonZeroIdx.add(influence.data[spotIdx][i][0]);
-          if (doseData[influence.data[spotIdx][i][0]] > maxVal) {
-            maxVal = doseData[influence.data[spotIdx][i][0]];
+          doseData[dose.influences[spotIdx][i][0]] += dose.influences[spotIdx][i][1] * dose.weights[spotIdx];
+          nonZeroIdx.add(dose.influences[spotIdx][i][0]);
+          if (doseData[dose.influences[spotIdx][i][0]] > maxVal) {
+            maxVal = doseData[dose.influences[spotIdx][i][0]];
           }
         }
       }
 
-      const imData = ctx.createImageData(influence.xsize, influence.ysize);
+      const imData = ctx.createImageData(dose.xsize, dose.ysize);
       nonZeroIdx.forEach((idx) => {
         imData.data[idx * 4 + 2] = doseData[idx] / maxVal * 255;
         imData.data[idx * 4 + 3] = 255; // alpha
@@ -131,17 +131,17 @@ function StructureCanvas({ structures, checkedList }:
 }
 
 interface MainPaneProps {
-  image: Img; checkedList: boolean[]; influence: Influence;
+  plan: Plan; checkedList: boolean[]
 }
-export default function MainPane({ image, checkedList, influence }: PropsWithChildren<MainPaneProps>) {
+export default function MainPane({ plan, checkedList }: PropsWithChildren<MainPaneProps>) {
   return (
     <Box>
-      <ImageCanvas image={image} />
+      <ImageCanvas image={plan.image} />
       <Box sx={{ m: '0', p: '0', mt: '-506px' }}>
-        <DoseCanvas influence={influence} />
+        <DoseCanvas dose={plan.dose} />
       </Box>
       <Box sx={{ m: '0', p: '0', mt: '-506px' }}>
-        <StructureCanvas structures={image.structureset.structures}
+        <StructureCanvas structures={plan.image.structureset.structures}
           checkedList={checkedList}
         />
       </Box>

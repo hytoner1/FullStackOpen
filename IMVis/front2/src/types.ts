@@ -1,6 +1,12 @@
 export interface Patient {
   id: string;
-  imageIds?: string[];
+  planIds: string[];
+};
+
+export interface Plan {
+  id: string;
+  image: Img;
+  dose: Dose;
 };
 
 export interface Img {
@@ -27,13 +33,13 @@ export interface Structure {
   contours: [number, number][][]; // (x,y) -> layer -> all layers
 };
 
-export interface Influence {
+export interface Dose {
   id: string;
 
   xsize: number; // To convert idx in data to (x,y)
   ysize: number;
   zsize: number;
 
-  data: [number, number][][]; // [(idx, contribution)] -> all spots (nRows)
+  influences: [number, number][][]; // [(idx, contribution)] -> all spots (nRows)
   weights: number[]; // weights times influences is dose
 }

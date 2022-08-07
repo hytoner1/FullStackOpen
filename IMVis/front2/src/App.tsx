@@ -10,16 +10,16 @@ import MainPane from './MainPane';
 import ProTip from './ProTip';
 
 import patients from './data/patients';
-import images from './data/images';
-import influences from './data/influences';
+import plans from './data/plans';
 
 const patient = patients[0];
-const image = images[0];
-const influence = influences[0];
+const plan = plans[0];
+const image = plan.image;
+const structureset = image.structureset;
 
 export default function App() {
   const [checkedList, setCheckedList] =
-    React.useState(new Array(image.structureset.structures.length).fill(true));
+    React.useState(new Array(structureset.structures.length).fill(true));
 
   return (
     <Container maxWidth="lg">
@@ -27,14 +27,13 @@ export default function App() {
 
       <Box sx={{ my: 4 }}>
         <Stack direction='row' spacing={3}>
-          <ContextPane patient={patient} image={image} checkedList={checkedList} setCheckedList={setCheckedList} />
+          <ContextPane patient={patient} plan={plan} checkedList={checkedList} setCheckedList={setCheckedList} />
           <Divider orientation="vertical" flexItem sx={{ mr: 1 }} />
 
           <Stack spacing={2}>
             <MainPane
-              image={image}
+              plan={plan}
               checkedList={checkedList}
-              influence={influence}
             />
             <Typography variant="h4" component="h1" gutterBottom>
               Create React App example with TypeScript

@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { PropsWithChildren } from 'react';
+
 import {
-  List, ListItemButton, ListItemIcon, ListItemText, Collapse, ListSubheader,
-  FormControlLabel, Checkbox, Stack
+  Button, List, ListItemButton, ListItemIcon, ListItemText, Collapse, ListSubheader,
+  FormControlLabel, Checkbox, Stack, Typography
 } from '@mui/material';
 
 import PersonIcon from '@mui/icons-material/Person';
@@ -9,11 +11,12 @@ import CollectionsIcon from '@mui/icons-material/Collections';
 import InterestsIcon from '@mui/icons-material/Interests';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import PolylineOutlinedIcon from '@mui/icons-material/PolylineOutlined';
 
 import patients from './data/patients';
 import images from './data/images';
 
-import { Structure, Patient, Img } from './types';
+import { Structure, Patient, Plan } from './types';
 
 function renderStructure(structure: Structure,
   onChange: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void) {
@@ -31,13 +34,13 @@ function renderStructure(structure: Structure,
   );
 }
 
-export default function ContextPane(
-  { patient, image, checkedList, setCheckedList }:
-  {
-      patient: Patient; image: Img;
-      checkedList: boolean[]; setCheckedList: React.Dispatch<React.SetStateAction<boolean[]>>
-  }
-) {
+interface ContextPaneProps {
+  patient: Patient;
+  plan: Plan;
+  checkedList: boolean[];
+  setCheckedList: React.Dispatch<React.SetStateAction<boolean[]>>
+}
+export default function ContextPane({ patient, plan, checkedList, setCheckedList }: PropsWithChildren<ContextPaneProps>) {
   const [structureListOpen, setStructureListOpen] = React.useState(true);
 
   const handleClick_openStructureList = () => {
@@ -62,16 +65,26 @@ export default function ContextPane(
       aria-labelledby="nested-list-subheader"
       subheader={
         <ListSubheader component="div" id="nested-list-subheader">
-          Context
+          <Stack
+            direction='row'
+            justifyContent="left"
+            alignItems="center"
+            spacing={1}
+          >
+            <PersonIcon fontSize='large'/>
+            <Typography variant='h5'>
+              {patient.id}
+            </Typography>
+          </Stack>
         </ListSubheader>
       }
     >
-      {/*Patient*/}
+      {/*Plan*/}
       <ListItemButton>
         <ListItemIcon sx={{ ml: 0, mr: -3 }}>
-          <PersonIcon />
+          <PolylineOutlinedIcon />
         </ListItemIcon>
-        <ListItemText primary={patient.id} />
+        <ListItemText primary={plan.id} />
       </ListItemButton>
 
       {/*Image*/}
@@ -79,7 +92,7 @@ export default function ContextPane(
         <ListItemIcon sx={{ ml: 2, mr: -3 }}>
           <CollectionsIcon />
         </ListItemIcon>
-        <ListItemText primary={image.id} />
+        <ListItemText primary={plan.image.id} />
       </ListItemButton>
 
       {/*Structureset*/}
@@ -103,7 +116,7 @@ export default function ContextPane(
           onClick={() => {}}
           sx={{ ml: -2 }}
         >
-          <ListItemText primary={image.structureset?.id}
+          <ListItemText primary={plan.image.structureset?.id}
             sx={{ ml: -2 }}
           />
         </ListItemButton>
@@ -115,7 +128,7 @@ export default function ContextPane(
       {/*Structures*/}
       <Collapse in={structureListOpen} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {image.structureset.structures.map((structure: Structure) => (
+          {plan.image.structureset.structures.map((structure: Structure) => (
             <Stack
               key={structure.id}
               direction="row"
