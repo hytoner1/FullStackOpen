@@ -27,3 +27,13 @@ export interface Structure {
   contours: [number, number][][]; // (x,y) -> layer -> all layers
 };
 
+export interface Influence {
+  id: string;
+
+  xsize: number; // To convert idx in data to (x,y)
+  ysize: number;
+  zsize: number;
+
+  data: [number, number][][]; // [(idx, contribution)] -> all spots (nRows)
+  weights: number[]; // weights times influences is dose
+}

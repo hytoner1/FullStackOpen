@@ -3,7 +3,8 @@ import {
   Box
 } from '@mui/material';
 
-import { Structure, Img } from './types';
+import { Structure, Img, Influence } from './types';
+import { PropsWithChildren } from 'react';
 
 async function drawData(imData: ImageData, ctx: CanvasRenderingContext2D) {
   const resizeWidth = 500 >> 0;
@@ -14,14 +15,11 @@ async function drawData(imData: ImageData, ctx: CanvasRenderingContext2D) {
   ctx.drawImage(ibm, 0, 0);
 }
 
-function ImageCanvas(props: any) {
-  const image: Img = props.image;
-
+interface ImageCanvasProps {
+  image: Img;
+}
+function ImageCanvas({ image }: PropsWithChildren<ImageCanvasProps>) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
-
-  //const styles = {
-  //  position: 'absolute'
-  //};
 
   React.useEffect(() => {
     const canvas = canvasRef?.current;
@@ -30,7 +28,7 @@ function ImageCanvas(props: any) {
       canvas.width = 500;
       canvas.height = 500;
 
-      let imData = ctx.createImageData(image.xsize, image.ysize);
+      const imData = ctx.createImageData(image.xsize, image.ysize);
       for (let i = 0; i < imData.height; i++) {
         for (let j = 0; j < imData.width; j++) {
           const idx = imData.width * (i * 4) + (j * 4);
@@ -46,13 +44,56 @@ function ImageCanvas(props: any) {
   }, []);
 
   return (
-    <canvas ref={canvasRef} {...props} />// style={styles} />
+    <canvas ref={canvasRef} />
+  );
+}
+
+interface DoseCanvasProps {
+  influence: Influence;
+}
+function DoseCanvas({ influence }: PropsWithChildren<DoseCanvasProps>) {
+  const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef?.current;
+    const ctx = canvas?.getContext('2d');
+    if (canvas && ctx) {
+      canvas.width = 500;
+      canvas.height = 500;
+
+      const doseData: number[] = new Array(influence.ysize * influence.xsize).fill(0);
+      const nonZeroIdx = new Set<number>();
+      let maxVal = 0;
+      for (let spotIdx = 0; spotIdx < influence.weights.length; spotIdx++) {
+        for (let i = 0; i < influence.data[spotIdx].length; i++) {
+          console.log(`${spotIdx}, ${i}, ${influence.data[spotIdx][i][1] * influence.weights[spotIdx]}`);
+
+          doseData[influence.data[spotIdx][i][0]] += influence.data[spotIdx][i][1] * influence.weights[spotIdx];
+          nonZeroIdx.add(influence.data[spotIdx][i][0]);
+          if (doseData[influence.data[spotIdx][i][0]] > maxVal) {
+            maxVal = doseData[influence.data[spotIdx][i][0]];
+          }
+        }
+      }
+
+      const imData = ctx.createImageData(influence.xsize, influence.ysize);
+      nonZeroIdx.forEach((idx) => {
+        imData.data[idx * 4 + 2] = doseData[idx] / maxVal * 255;
+        imData.data[idx * 4 + 3] = 255; // alpha
+      });
+
+      drawData(imData, ctx);
+    }
+  }, []);
+
+  return (
+    <canvas ref={canvasRef} />
   );
 }
 
 function StructureCanvas({ structures, checkedList }:
   { structures: Structure[]; checkedList: boolean[] }
-  ) {
+) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
   React.useEffect(() => {
@@ -89,13 +130,17 @@ function StructureCanvas({ structures, checkedList }:
   );
 }
 
-export default function MainPane({ image, checkedList }:
-  { image: Img; checkedList: boolean[] }) {
-
+interface MainPaneProps {
+  image: Img; checkedList: boolean[]; influence: Influence;
+}
+export default function MainPane({ image, checkedList, influence }: PropsWithChildren<MainPaneProps>) {
   return (
     <Box>
-      <ImageCanvas image={image} margin={0}/>
-      <Box sx={{m: '0', p: '0', mt: '-506px'}}>
+      <ImageCanvas image={image} />
+      <Box sx={{ m: '0', p: '0', mt: '-506px' }}>
+        <DoseCanvas influence={influence} />
+      </Box>
+      <Box sx={{ m: '0', p: '0', mt: '-506px' }}>
         <StructureCanvas structures={image.structureset.structures}
           checkedList={checkedList}
         />

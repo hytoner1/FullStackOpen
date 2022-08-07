@@ -11,9 +11,11 @@ import ProTip from './ProTip';
 
 import patients from './data/patients';
 import images from './data/images';
+import influences from './data/influences';
 
 const patient = patients[0];
 const image = images[0];
+const influence = influences[0];
 
 export default function App() {
   const [checkedList, setCheckedList] =
@@ -29,7 +31,11 @@ export default function App() {
           <Divider orientation="vertical" flexItem sx={{ mr: 1 }} />
 
           <Stack spacing={2}>
-            <MainPane image={image} checkedList={checkedList}/>
+            <MainPane
+              image={image}
+              checkedList={checkedList}
+              influence={influence}
+            />
             <Typography variant="h4" component="h1" gutterBottom>
               Create React App example with TypeScript
             </Typography>
