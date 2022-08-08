@@ -42,9 +42,8 @@ function ImageCanvas({ image }: PropsWithChildren<ImageCanvasProps>) {
       }
 
       drawData(imData, ctx);
-      //ctx.putImageData(imData, 0, 0);
     }
-  }, []);
+  }, [image]);
 
   return (
     <canvas ref={canvasRef} />
@@ -124,7 +123,7 @@ function StructureCanvas({ structures, checkedList }:
       }
 
     }
-  }, [checkedList]);
+  }, [checkedList, structures]);
 
   return (
     <canvas ref={canvasRef} />

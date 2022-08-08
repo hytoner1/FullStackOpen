@@ -27,8 +27,8 @@ const CreateImageArray = (xsize: number, ysize: number) => {
   return imArray;
 }
 
-const xsize1 = 128;
-const ysize1 = 128;
+const xsize1 = 64;
+const ysize1 = 64;
 const images: Img[] = [
   {
     id: 'image1',

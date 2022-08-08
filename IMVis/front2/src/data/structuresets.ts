@@ -1,26 +1,35 @@
 import { StructureSet } from '../types';
 
+const CreateBodyContour = (radius: number, nPoints: number, x=0, y=0) => {
+  const contour: [number, number][] = new Array(nPoints);
+  for (let i = 0; i < nPoints; i++) {
+    const angleRad = i * 2 * Math.PI / nPoints;
+    contour[i] = [radius * Math.cos(angleRad) + x,
+                  radius * Math.sin(angleRad) + y];
+  }
+
+  return contour;
+}
+
 const structuresets: StructureSet[] = [
   {
     id: 'SSet1',
     structures: [
       {
-        id: 'structure1',
+        id: 'BODY',
         idx: 0,
-        color: '#C555A1',
+        color: '#00BB00',
         contours: [
-          [
-            [0, 0], [500, 500], [400, 100]
-          ]
+          CreateBodyContour(230, 230, 251, 251)
         ]
       },
       {
-        id: 'structure2',
+        id: 'Target',
         idx: 1,
-        color: '#A5A511',
+        color: '#BB0000',
         contours: [
           [
-            [500, 0], [0, 500], [100, 100]
+            [200, 200], [300, 200], [300, 300], [200, 300]
           ]
         ]
       }
