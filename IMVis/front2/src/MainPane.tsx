@@ -9,8 +9,9 @@ import { PropsWithChildren } from 'react';
 async function drawData(imData: ImageData, ctx: CanvasRenderingContext2D) {
   const resizeWidth = 500 >> 0;
   const resizeHeight = 500 >> 0;
+  const resizeQuality = 'pixelated';
   const ibm = await createImageBitmap(imData, 0, 0, imData.width, imData.height,
-    { resizeWidth, resizeHeight });
+    { resizeWidth, resizeHeight, resizeQuality });
 
   ctx.drawImage(ibm, 0, 0);
 }
@@ -32,6 +33,7 @@ function ImageCanvas({ image }: PropsWithChildren<ImageCanvasProps>) {
       for (let i = 0; i < imData.height; i++) {
         for (let j = 0; j < imData.width; j++) {
           const idx = imData.width * (i * 4) + (j * 4);
+
           imData.data[idx + 0] = image.data[0][i][j] * 255;
           imData.data[idx + 1] = image.data[0][i][j] * 255;
           imData.data[idx + 2] = image.data[0][i][j] * 255;
@@ -40,6 +42,7 @@ function ImageCanvas({ image }: PropsWithChildren<ImageCanvasProps>) {
       }
 
       drawData(imData, ctx);
+      //ctx.putImageData(imData, 0, 0);
     }
   }, []);
 
@@ -66,8 +69,6 @@ function DoseCanvas({ dose }: PropsWithChildren<DoseCanvasProps>) {
       let maxVal = 0;
       for (let spotIdx = 0; spotIdx < dose.weights.length; spotIdx++) {
         for (let i = 0; i < dose.influences[spotIdx].length; i++) {
-          console.log(`${spotIdx}, ${i}, ${dose.influences[spotIdx][i][1] * dose.weights[spotIdx]}`);
-
           doseData[dose.influences[spotIdx][i][0]] += dose.influences[spotIdx][i][1] * dose.weights[spotIdx];
           nonZeroIdx.add(dose.influences[spotIdx][i][0]);
           if (doseData[dose.influences[spotIdx][i][0]] > maxVal) {
