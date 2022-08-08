@@ -67,6 +67,10 @@ function DoseCanvas({ dose }: PropsWithChildren<DoseCanvasProps>) {
       const nonZeroIdx = new Set<number>();
       let maxVal = 0;
       for (let spotIdx = 0; spotIdx < dose.weights.length; spotIdx++) {
+        if (dose.weights[spotIdx] <= 0.01) {
+          continue;
+        }
+
         for (let i = 0; i < dose.influences[spotIdx].length; i++) {
           doseData[dose.influences[spotIdx][i][0]] += dose.influences[spotIdx][i][1] * dose.weights[spotIdx];
           nonZeroIdx.add(dose.influences[spotIdx][i][0]);
@@ -78,13 +82,15 @@ function DoseCanvas({ dose }: PropsWithChildren<DoseCanvasProps>) {
 
       const imData = ctx.createImageData(dose.xsize, dose.ysize);
       nonZeroIdx.forEach((idx) => {
+        imData.data[idx * 4 + 0] = 255 - doseData[idx] / maxVal * 255;
+        imData.data[idx * 4 + 1] = 50;//255 - doseData[idx] / maxVal * 255;
         imData.data[idx * 4 + 2] = doseData[idx] / maxVal * 255;
         imData.data[idx * 4 + 3] = 255; // alpha
       });
 
       drawData(imData, ctx);
     }
-  }, []);
+  }, [dose]);
 
   return (
     <canvas ref={canvasRef} />
