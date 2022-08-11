@@ -45,16 +45,6 @@ const doses: Dose[] = [
     zsize: image.zsize,
 
     influences: [
-      //[
-      //  [2, .1],
-      //  [7, .3],
-      //  [12, 1]
-      //],
-      //[
-      //  [0, .1],
-      //  [6, .3],
-      //  [12, 1]
-      // ]
       CreateInfluence(image.xsize, image.ysize, [26, 26], [32, 32], false),
       CreateInfluence(image.xsize, image.ysize, [32, 26], [38, 32], false),
       CreateInfluence(image.xsize, image.ysize, [26, 32], [32, 38], false),
@@ -68,7 +58,7 @@ const doses: Dose[] = [
 
     weights: [.25, .25, 0.5, 0.5,
               .25, 0.5, 0.25, 0.5]
-  } // influence1
+  } // Dose1
 ];
 
 export default doses;
