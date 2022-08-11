@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {
-  Box, Container, Grid, Divider,
+  Box, Container, Divider,
   Stack, Typography
 } from '@mui/material';
 
 import TopMenu from './TopMenu';
-import ContextPane from './ContextPane';
-import MainPane from './MainPane';
+import ContextPane from './Panes/ContextPane';
+import MainPane from './Panes/MainPane';
+import SpotsPane from './Panes/SpotsPane';
 import ProTip from './ProTip';
 
 import patients from './data/patients';
@@ -26,20 +27,19 @@ export default function App() {
       <TopMenu />
 
       <Box sx={{ my: 4 }}>
-        <Stack direction='row' spacing={3}>
+        <Stack direction='row' spacing={3}
+          divider={<Divider orientation="vertical" flexItem sx={{ mr: 1 }} />}
+        >
           <ContextPane patient={patient} plan={plan} checkedList={checkedList} setCheckedList={setCheckedList} />
-          <Divider orientation="vertical" flexItem sx={{ mr: 1 }} />
 
           <Stack spacing={2}>
             <MainPane
               plan={plan}
               checkedList={checkedList}
             />
-            <Typography variant="h4" component="h1" gutterBottom>
-              Create React App example with TypeScript
-            </Typography>
-            <ProTip />
           </Stack>
+
+          <SpotsPane />
         </Stack>
       </Box>
     </Container>

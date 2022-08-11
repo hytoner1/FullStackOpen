@@ -1,10 +1,11 @@
 import * as React from 'react';
 import {
-  Box
+  Box, Tooltip, Typography
 } from '@mui/material';
 
-import { Plan, Img, Structure, Dose } from './types';
+import { Plan, Img, Structure, Dose } from '../types';
 import { PropsWithChildren } from 'react';
+import { BoxProps } from '@mui/material';
 
 async function drawData(imData: ImageData, ctx: CanvasRenderingContext2D) {
   const resizeWidth = 500 >> 0;
@@ -52,8 +53,9 @@ function ImageCanvas({ image }: PropsWithChildren<ImageCanvasProps>) {
 
 interface DoseCanvasProps {
   dose: Dose;
+  setDoseData: React.Dispatch<React.SetStateAction<number[]>>;
 }
-function DoseCanvas({ dose }: PropsWithChildren<DoseCanvasProps>) {
+function DoseCanvas({ dose, setDoseData }: PropsWithChildren<DoseCanvasProps>) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
   React.useEffect(() => {
@@ -63,7 +65,7 @@ function DoseCanvas({ dose }: PropsWithChildren<DoseCanvasProps>) {
       canvas.width = 500;
       canvas.height = 500;
 
-      const doseData: number[] = new Array(dose.ysize * dose.xsize).fill(0);
+      const tmpDoseData = new Array(dose.xsize * dose.ysize).fill(0);
       const nonZeroIdx = new Set<number>();
       let maxVal = 0;
       for (let spotIdx = 0; spotIdx < dose.weights.length; spotIdx++) {
@@ -72,22 +74,23 @@ function DoseCanvas({ dose }: PropsWithChildren<DoseCanvasProps>) {
         }
 
         for (let i = 0; i < dose.influences[spotIdx].length; i++) {
-          doseData[dose.influences[spotIdx][i][0]] += dose.influences[spotIdx][i][1] * dose.weights[spotIdx];
+          tmpDoseData[dose.influences[spotIdx][i][0]] += dose.influences[spotIdx][i][1] * dose.weights[spotIdx];
           nonZeroIdx.add(dose.influences[spotIdx][i][0]);
-          if (doseData[dose.influences[spotIdx][i][0]] > maxVal) {
-            maxVal = doseData[dose.influences[spotIdx][i][0]];
+          if (tmpDoseData[dose.influences[spotIdx][i][0]] > maxVal) {
+            maxVal = tmpDoseData[dose.influences[spotIdx][i][0]];
           }
         }
       }
 
       const imData = ctx.createImageData(dose.xsize, dose.ysize);
       nonZeroIdx.forEach((idx) => {
-        imData.data[idx * 4 + 0] = 255 - doseData[idx] / maxVal * 255;
+        imData.data[idx * 4 + 0] = tmpDoseData[idx] / maxVal * 255;
         imData.data[idx * 4 + 1] = 50;//255 - doseData[idx] / maxVal * 255;
-        imData.data[idx * 4 + 2] = doseData[idx] / maxVal * 255;
+        imData.data[idx * 4 + 2] = 255 - tmpDoseData[idx] / maxVal * 255;
         imData.data[idx * 4 + 3] = 255; // alpha
       });
 
+      setDoseData(tmpDoseData);
       drawData(imData, ctx);
     }
   }, [dose]);
@@ -140,17 +143,55 @@ interface MainPaneProps {
   plan: Plan; checkedList: boolean[]
 }
 export default function MainPane({ plan, checkedList }: PropsWithChildren<MainPaneProps>) {
+  const [coords, setCoords] = React.useState([-1, -1]); // XY coords for mouse on canvas. Negatives ignored.
+  const [doseData, setDoseData] = React.useState( // array of dose values
+    new Array(plan.dose.ysize * plan.dose.xsize).fill(0));
+
+  const handleMouseMove = (event: any) => { 
+    event.preventDefault();
+
+    let tmpX = Math.floor((event.clientX - event.target.offsetLeft) * plan.image.xsize / 500);
+    let tmpY = Math.floor((event.clientY - event.target.offsetTop) * plan.image.ysize / 500);
+
+    if (tmpX < 0 || tmpX >= plan.image.xsize) {
+      tmpX = -1;
+    }
+
+    if (tmpY < 0 || tmpY >= plan.image.ysize) {
+      tmpY = -1;
+    }
+
+    setCoords([tmpX, tmpY]);
+  }
+
   return (
-    <Box>
-      <ImageCanvas image={plan.image} />
-      <Box sx={{ m: '0', p: '0', mt: '-506px' }}>
-        <DoseCanvas dose={plan.dose} />
-      </Box>
-      <Box sx={{ m: '0', p: '0', mt: '-506px' }}>
-        <StructureCanvas structures={plan.image.structureset.structures}
-          checkedList={checkedList}
-        />
-      </Box>
-    </Box>
+    <Tooltip
+      title={
+        coords[0] >= 0 && coords[1] >= 0 &&
+        <Typography>
+          {`(x,y): (${coords[0]},${coords[1]})`}
+          <br />
+          {`${plan.image.data[0][coords[0]][coords[1]].toFixed(1)} HU`}
+          <br />
+          {`${doseData[coords[0] + plan.dose.xsize * coords[1]].toFixed(2)} Gy`
+          }
+        </Typography>
+      }
+
+      followCursor={true} >
+      <div onMouseMove={handleMouseMove}>
+        <ImageCanvas image={plan.image} />
+
+        <Box sx={{ m: '0', p: '0', mt: '-506px' }}>
+          <DoseCanvas dose={plan.dose} setDoseData={setDoseData}  />
+        </Box>
+
+        <Box sx={{ m: '0', p: '0', mt: '-506px' }}>
+          <StructureCanvas structures={plan.image.structureset.structures}
+            checkedList={checkedList}
+          />
+        </Box>
+      </div>
+    </Tooltip>
   );
 }

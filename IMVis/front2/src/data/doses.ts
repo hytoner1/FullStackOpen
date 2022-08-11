@@ -18,7 +18,7 @@ function CreateInfluence(xsize: number, ysize: number,
     for (let i = targetUL[1]; i < targetLR[1]; i++) {
       for (let j = 0; j < targetUL[0]; j++) {
         const idx = i * xsize + j;
-        const val = 0.3 + 0.2 * (targetUL[0] - j);
+        const val = 0.3 + 0.2 * j / targetUL[0];
         influence.push([idx, val]);
       }
     }
@@ -27,7 +27,7 @@ function CreateInfluence(xsize: number, ysize: number,
     for (let i = 0; i < targetUL[1]; i++) {
       for (let j = targetUL[0]; j < targetLR[0]; j++) {
         const idx = i * xsize + j;
-        const val = 0.3 + 0.2 * (targetUL[1] - i);
+        const val = 0.3 + 0.2 * i / targetUL[1];
         influence.push([idx, val]);
       }
     }
