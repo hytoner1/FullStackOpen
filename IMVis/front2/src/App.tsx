@@ -8,7 +8,6 @@ import TopMenu from './TopMenu';
 import ContextPane from './Panes/ContextPane';
 import MainPane from './Panes/MainPane';
 import SpotsPane from './Panes/SpotsPane';
-import ProTip from './ProTip';
 
 import patients from './data/patients';
 import plans from './data/plans';
@@ -21,6 +20,7 @@ const structureset = image.structureset;
 export default function App() {
   const [checkedList, setCheckedList] =
     React.useState(new Array(structureset.structures.length).fill(true));
+  const [weights, setWeights] = React.useState(plan.dose.weights);
 
   return (
     <Container maxWidth="lg">
@@ -36,10 +36,12 @@ export default function App() {
             <MainPane
               plan={plan}
               checkedList={checkedList}
+              weights={weights}
+              setWeights={setWeights}
             />
           </Stack>
 
-          <SpotsPane />
+          <SpotsPane weights={weights} setWeights={setWeights} />
         </Stack>
       </Box>
     </Container>

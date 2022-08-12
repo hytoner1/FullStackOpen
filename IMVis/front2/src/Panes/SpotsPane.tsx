@@ -1,12 +1,28 @@
 import * as React from 'react';
 import { PropsWithChildren } from 'react';
 
-interface ContextPaneProps {
-  
+import { Dose } from '../types';
+
+import {
+  Button, List, ListItemButton, ListItemIcon, ListItemText, Collapse, ListSubheader,
+  FormControlLabel, Checkbox, Stack, Typography
+} from '@mui/material';
+
+interface SpotsPaneProps {
+  weights: number[];
+  setWeights: React.Dispatch<React.SetStateAction<number[]>>;
 }
-export default function ContextPane() {
+export default function SpotsPane({ weights, setWeights }: PropsWithChildren<SpotsPaneProps>) {
 
   return (
-    <div />
+    <List>
+      {
+        weights.map((weight: number, index: number) => (
+          <ListItemText key={index}>
+            {index}: {weight.toFixed(2)}
+          </ListItemText>
+        ))
+      }
+    </List>
   );
 }
