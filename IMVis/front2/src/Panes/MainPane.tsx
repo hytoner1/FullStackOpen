@@ -177,13 +177,6 @@ export default function MainPane({ plan, checkedList, weights, setWeights, influ
     const tmpY = Math.floor((event.clientY - event.target.offsetTop) * plan.image.ysize / 500);
     const pixelIdx = tmpY * plan.image.xsize + tmpX;
 
-    if (event.ctrlKey) {
-      console.log("ctrl click", tmpX, tmpY);
-    }
-    else {
-      console.log("click", tmpX, tmpY);
-    }
-
     // Find the affected spots
     const affectedSpots: [number, number][] = []; // Spot idx, contribution
     for (let spotIdx = 0; spotIdx < influences.length; spotIdx++) {
@@ -195,15 +188,14 @@ export default function MainPane({ plan, checkedList, weights, setWeights, influ
       }
     }
 
-    console.log(affectedSpots);
-
     const sumOfInfluences = affectedSpots.reduce((tmpSum, x) => tmpSum + x[1], 0);
     console.log(sumOfInfluences);
 
     const tmpWeights = [...weights];
     const changeAmount = 0.1;
     affectedSpots.forEach((x) => {
-      tmpWeights[x[0]] += changeAmount * x[1] / sumOfInfluences * Math.pow(-1, event.ctrlKey);
+      tmpWeights[x[0]] = Math.max(0, tmpWeights[x[0]] +
+        changeAmount * x[1] / sumOfInfluences * Math.pow(-1, event.ctrlKey));
     });
 
     setWeights(tmpWeights);

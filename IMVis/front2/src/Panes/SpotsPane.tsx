@@ -51,7 +51,7 @@ export default function SpotsPane({ weights, dose }:
                       <TreeItem
                         key={`${field.id}-${layer.energy.toFixed(0)}-${spot.globalIdx}`}
                         nodeId={`${field.id}-${layer.energy.toFixed(0)}-${spot.globalIdx}`}
-                        label={`${spot.globalIdx}: ${spot.weight.toFixed(2)}`}
+                        label={`${spot.globalIdx}: ${weights[spot.globalIdx].toFixed(2)}`}
                       />
                     ))
                   }
