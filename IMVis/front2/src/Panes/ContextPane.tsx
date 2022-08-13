@@ -13,24 +13,102 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import PolylineOutlinedIcon from '@mui/icons-material/PolylineOutlined';
 
-import patients from '../data/patients';
-import images from '../data/images';
-
 import { Structure, Patient, Plan } from '../types';
 
-function renderStructure(structure: Structure,
-  onChange: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void) {
+
+interface StructureSetHeaderProps {
+  id: string;
+  checkedList: boolean[];
+  setCheckedList: React.Dispatch<React.SetStateAction<boolean[]>>;
+  structureListOpen: boolean;
+  setStructureListOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const StructureSetHeader = ({
+  id, checkedList, setCheckedList, structureListOpen, setStructureListOpen }:
+  PropsWithChildren<StructureSetHeaderProps>) => {
+
+  const handleChangeStructureSetCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newList = new Array(checkedList.length).fill(event.target.checked);
+    setCheckedList(newList);
+  };
+
   return (
-    <ListItemButton key={structure.id}>
-      <ListItemIcon sx={{ ml: 4, mr: -3, color: structure.color }}>
-        <FormControlLabel
-          label=''
-          control={<Checkbox checked={false} onChange={onChange} />}
+    <Stack
+      direction="row"
+      justifyContent="center"
+      alignItems="center"
+      spacing={0}
+    >
+      <FormControlLabel label=''
+        control={
+          <Checkbox
+            checked={checkedList.every((x: boolean) => x === true)}
+            indeterminate={!checkedList.every((x: boolean) => x === true) && !checkedList.every((x: boolean) => x === false)}
+            onChange={handleChangeStructureSetCheckbox}
+          />
+        }
+        sx={{ ml: 3 }}
+      />
+      <ListItemButton
+        onClick={() => {}}
+        sx={{ ml: -2 }}
+      >
+        <ListItemText primary={id}
+          sx={{ ml: -2 }}
         />
-        <CollectionsIcon sx={{ ml: -1, mr: 3, mt: 1 }} />
-      </ListItemIcon>
-      <ListItemText primary={structure.id} />
-    </ListItemButton>
+      </ListItemButton>
+      <ListItemButton onClick={() => setStructureListOpen(!structureListOpen)} >
+        {structureListOpen ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+    </Stack>
+  );
+}
+
+interface StructureListProps {
+  structures: Structure[];
+  checkedList: boolean[];
+  setCheckedList: React.Dispatch<React.SetStateAction<boolean[]>>;
+  structureListOpen: boolean;
+}
+const StructureList = ({
+  structures, checkedList, setCheckedList, structureListOpen }:
+  PropsWithChildren<StructureListProps>) => {
+
+  const handleChangeStructureCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newList = [...checkedList];
+    newList[parseInt(event.target.name)] = event.target.checked;
+    setCheckedList(newList);
+  };
+
+  return (
+    <Collapse in={structureListOpen} timeout="auto" unmountOnExit>
+      <List component="div" disablePadding>
+        {structures.map((structure: Structure) => (
+          <Stack
+            key={structure.id}
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            spacing={0}
+          >
+            <Checkbox
+              checked={checkedList[structure.idx]}
+              onChange={handleChangeStructureCheckbox}
+              name={`${structure.idx}`}
+              sx={{ ml: 5 }}
+            />
+
+            <ListItemButton>
+              <ListItemIcon sx={{ ml: 0, mr: -3, color: structure.color }}>
+                <CollectionsIcon sx={{ ml: -1, mr: 3, mt: 1 }} />
+              </ListItemIcon>
+              <ListItemText primary={structure.id} />
+            </ListItemButton>
+          </Stack>
+        ))
+        }
+      </List>
+    </Collapse>
   );
 }
 
@@ -38,25 +116,10 @@ interface ContextPaneProps {
   patient: Patient;
   plan: Plan;
   checkedList: boolean[];
-  setCheckedList: React.Dispatch<React.SetStateAction<boolean[]>>
+  setCheckedList: React.Dispatch<React.SetStateAction<boolean[]>>;
 }
 export default function ContextPane({ patient, plan, checkedList, setCheckedList }: PropsWithChildren<ContextPaneProps>) {
   const [structureListOpen, setStructureListOpen] = React.useState(true);
-
-  const handleClick_openStructureList = () => {
-    setStructureListOpen(!structureListOpen);
-  };
-
-  const handleChange_structureSetCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newList = new Array(checkedList.length).fill(event.target.checked);
-    setCheckedList(newList);
-  };
-
-  const handleChange_structureCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newList = [...checkedList];
-    newList[parseInt(event.target.name)] = event.target.checked;
-    setCheckedList(newList);
-  };
 
   return (
     <List
@@ -71,7 +134,7 @@ export default function ContextPane({ patient, plan, checkedList, setCheckedList
             alignItems="center"
             spacing={1}
           >
-            <PersonIcon fontSize='large'/>
+            <PersonIcon fontSize='large' />
             <Typography variant='h5'>
               {patient.id}
             </Typography>
@@ -96,64 +159,23 @@ export default function ContextPane({ patient, plan, checkedList, setCheckedList
       </ListItemButton>
 
       {/*Structureset*/}
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={0}
-      >
-        <FormControlLabel label=''
-          control={
-            <Checkbox
-              checked={checkedList.every((x: boolean) => x === true)}
-              indeterminate={!checkedList.every((x: boolean) => x === true) && !checkedList.every((x: boolean) => x === false)}
-              onChange={handleChange_structureSetCheckbox}
-            />
-          }
-          sx={{ ml: 3 }}
-        />
-        <ListItemButton
-          onClick={() => {}}
-          sx={{ ml: -2 }}
-        >
-          <ListItemText primary={plan.image.structureset?.id}
-            sx={{ ml: -2 }}
-          />
-        </ListItemButton>
-        <ListItemButton onClick={handleClick_openStructureList} >
-          {structureListOpen ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-      </Stack>
+      <StructureSetHeader
+        id={plan.image.structureset?.id}
+        checkedList={checkedList}
+        setCheckedList={setCheckedList}
+        structureListOpen={structureListOpen}
+        setStructureListOpen={setStructureListOpen}
+      />
 
       {/*Structures*/}
-      <Collapse in={structureListOpen} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {plan.image.structureset.structures.map((structure: Structure) => (
-            <Stack
-              key={structure.id}
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={0}
-            >
-              <Checkbox
-                checked={checkedList[structure.idx]}
-                onChange={handleChange_structureCheckbox}
-                name={`${structure.idx}`}
-                sx={{ ml: 5 }}
-              />
+      <StructureList
+        structures={plan.image.structureset?.structures}
+        checkedList={checkedList}
+        setCheckedList={setCheckedList}
+        structureListOpen={structureListOpen}
+      />
 
-              <ListItemButton>
-                <ListItemIcon sx={{ ml: 0, mr: -3, color: structure.color }}>
-                  <CollectionsIcon sx={{ ml: -1, mr: 3, mt: 1 }} />
-                </ListItemIcon>
-                <ListItemText primary={structure.id} />
-              </ListItemButton>
-            </Stack>
-          ))
-          }
-        </List>
-      </Collapse>
+
     </List>
   );
 }
