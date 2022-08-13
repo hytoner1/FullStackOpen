@@ -66,7 +66,7 @@ export default function App() {
             />
           </Stack>
 
-          <SpotsPane weights={weights} />
+          <SpotsPane weights={weights} dose={plan.dose} />
         </Stack>
       </Box>
     </Container>
