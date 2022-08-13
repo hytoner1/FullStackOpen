@@ -10,9 +10,8 @@ import {
 
 interface SpotsPaneProps {
   weights: number[];
-  setWeights: React.Dispatch<React.SetStateAction<number[]>>;
 }
-export default function SpotsPane({ weights, setWeights }: PropsWithChildren<SpotsPaneProps>) {
+export default function SpotsPane({ weights }: PropsWithChildren<SpotsPaneProps>) {
 
   return (
     <List>

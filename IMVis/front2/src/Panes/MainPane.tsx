@@ -54,8 +54,10 @@ interface DoseCanvasProps {
   dose: Dose;
   setDoseData: React.Dispatch<React.SetStateAction<number[]>>;
   weights: number[];
+  influences: [number, number][][]
 }
-function DoseCanvas({ dose, setDoseData, weights }: PropsWithChildren<DoseCanvasProps>) {
+function DoseCanvas({ dose, setDoseData, weights, influences }:
+  PropsWithChildren<DoseCanvasProps>) {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
 
   React.useEffect(() => {
@@ -73,11 +75,11 @@ function DoseCanvas({ dose, setDoseData, weights }: PropsWithChildren<DoseCanvas
           continue;
         }
 
-        for (let i = 0; i < dose.influences[spotIdx].length; i++) {
-          tmpDoseData[dose.influences[spotIdx][i][0]] += dose.influences[spotIdx][i][1] * weights[spotIdx];
-          nonZeroIdx.add(dose.influences[spotIdx][i][0]);
-          if (tmpDoseData[dose.influences[spotIdx][i][0]] > maxVal) {
-            maxVal = tmpDoseData[dose.influences[spotIdx][i][0]];
+        for (let i = 0; i < influences[spotIdx].length; i++) {
+          tmpDoseData[influences[spotIdx][i][0]] += influences[spotIdx][i][1] * weights[spotIdx];
+          nonZeroIdx.add(influences[spotIdx][i][0]);
+          if (tmpDoseData[influences[spotIdx][i][0]] > maxVal) {
+            maxVal = tmpDoseData[influences[spotIdx][i][0]];
           }
         }
       }
@@ -142,13 +144,15 @@ function StructureCanvas({ structures, checkedList }:
 interface MainPaneProps {
   plan: Plan; checkedList: boolean[];
   weights: number[]; setWeights: React.Dispatch<React.SetStateAction<number[]>>;
+  influences: [number, number][][];
 }
-export default function MainPane({ plan, checkedList, weights, setWeights }: PropsWithChildren<MainPaneProps>) {
+export default function MainPane({ plan, checkedList, weights, setWeights, influences }:
+  PropsWithChildren<MainPaneProps>) {
   const [coords, setCoords] = React.useState([-1, -1]); // XY coords for mouse on canvas. Negatives ignored.
   const [doseData, setDoseData] = React.useState( // array of dose values
     new Array(plan.dose.ysize * plan.dose.xsize).fill(0));
 
-  const handleMouseMove = (event: any) => { 
+  const handleMouseMove = (event: any) => {
     event.preventDefault();
 
     let tmpX = Math.floor((event.clientX - event.target.offsetLeft) * plan.image.xsize / 500);
@@ -182,10 +186,10 @@ export default function MainPane({ plan, checkedList, weights, setWeights }: Pro
 
     // Find the affected spots
     const affectedSpots: [number, number][] = []; // Spot idx, contribution
-    for (let spotIdx = 0; spotIdx < plan.dose.influences.length; spotIdx++) {
-      for (let idx = 0; idx < plan.dose.influences[spotIdx].length; idx++) {
-        if (plan.dose.influences[spotIdx][idx][0] === pixelIdx) {
-          affectedSpots.push([spotIdx, plan.dose.influences[spotIdx][idx][1]]);
+    for (let spotIdx = 0; spotIdx < influences.length; spotIdx++) {
+      for (let idx = 0; idx < influences[spotIdx].length; idx++) {
+        if (influences[spotIdx][idx][0] === pixelIdx) {
+          affectedSpots.push([spotIdx, influences[spotIdx][idx][1]]);
           break;
         }
       }
@@ -224,7 +228,12 @@ export default function MainPane({ plan, checkedList, weights, setWeights }: Pro
         <ImageCanvas image={plan.image} />
 
         <Box sx={{ m: '0', p: '0', mt: '-506px' }}>
-          <DoseCanvas dose={plan.dose} setDoseData={setDoseData} weights={weights} />
+          <DoseCanvas
+            dose={plan.dose}
+            setDoseData={setDoseData}
+            weights={weights}
+            influences={influences}
+          />
         </Box>
 
         <Box sx={{ m: '0', p: '0', mt: '-506px' }}>

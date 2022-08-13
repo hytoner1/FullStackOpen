@@ -4,7 +4,7 @@ import images from './images';
 import doses from './doses';
 
 const image = images[0];
-const dose = doses[0];
+const dose = doses[1];
 
 const plans: Plan[] = [
   {

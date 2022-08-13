@@ -40,6 +40,26 @@ export interface Dose {
   ysize: number;
   zsize: number;
 
+  fields?: Field[];
+
   influences: [number, number][][]; // [(idx, contribution)] -> all spots (nRows)
   weights: number[]; // weights times influences is dose
-}
+};
+
+export interface Field {
+  id: string;
+  angle: number; // Field angle in degrees
+
+  layers: Layer[];
+};
+
+export interface Layer {
+  energy: number;
+  spots: Spot[];
+};
+
+export interface Spot {
+  globalIdx: number; // Unique index for each spot of a plan
+  influence: [number, number][]; // list of [dose grid idx, relative contribution]
+  weight: number;
+};

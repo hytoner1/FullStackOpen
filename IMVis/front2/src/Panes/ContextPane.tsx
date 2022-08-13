@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PropsWithChildren } from 'react';
 
 import {
-  Button, List, ListItemButton, ListItemIcon, ListItemText, Collapse, ListSubheader,
+  Button, Box, List, ListItemButton, ListItemIcon, ListItemText, Collapse, ListSubheader,
   FormControlLabel, Checkbox, Stack, Typography
 } from '@mui/material';
 
@@ -12,8 +12,10 @@ import InterestsIcon from '@mui/icons-material/Interests';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import PolylineOutlinedIcon from '@mui/icons-material/PolylineOutlined';
+import FlareIcon from '@mui/icons-material/Flare';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-import { Structure, Patient, Plan } from '../types';
+import { Structure, Patient, Plan, Dose, Field } from '../types';
 
 
 interface StructureSetHeaderProps {
@@ -112,6 +114,66 @@ const StructureList = ({
   );
 }
 
+interface DoseListProps {
+  dose: Dose;
+}
+const DoseList = ({ dose }: PropsWithChildren<DoseListProps>) => {
+  const [fieldListOpen, setFieldListOpen] = React.useState(true);
+
+  return (
+    <Box>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={0}
+      >
+        <ListItemButton
+          onClick={() => {}}
+          sx={{ ml: 0 }}
+        >
+          <FormControlLabel label=''
+            control={
+              <FlareIcon />
+            }
+            sx={{ ml: 2 }}
+          />
+          <ListItemText primary={dose.id}
+            sx={{ ml: -1 }}
+          />
+        </ListItemButton>
+        <ListItemButton onClick={() => setFieldListOpen(!fieldListOpen)} >
+          {fieldListOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+      </Stack>
+
+      {/*Fields*/}
+      <Collapse in={fieldListOpen} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {dose.fields?.map((field: Field) => (
+            <Stack
+              key={field.id}
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={0}
+            >
+
+              <ListItemButton>
+                <ListItemIcon sx={{ ml: 5, mr: -3 }}>
+                  <ArrowForwardIosIcon sx={{ ml: -1, mr: 3, rotate: `${field.angle-90}deg` }} />
+                </ListItemIcon>
+                <ListItemText primary={field.id} />
+              </ListItemButton>
+            </Stack>
+          ))
+          }
+        </List>
+      </Collapse>
+    </Box>
+  );
+}
+
 interface ContextPaneProps {
   patient: Patient;
   plan: Plan;
@@ -175,6 +237,8 @@ export default function ContextPane({ patient, plan, checkedList, setCheckedList
         structureListOpen={structureListOpen}
       />
 
+      {/*Dose*/}
+      <DoseList dose={plan.dose} />
 
     </List>
   );
