@@ -13,4 +13,19 @@ router.get('/:id', (req, res) => {
   patient ? res.send(patient) : res.status(404).end();
 });
 
+router.post('/', (req, res) => {
+  const patientId = req.body.patientId;
+  console.log('patientId:', patientId);
+  if (!patientId) {
+    res.status(404).send({ error: 'Parameter \'patientId\' missing' });
+  }
+
+  const patient = patientService.addPatient(patientId);
+  if (patient === undefined) {
+    res.status(404).send({ error: 'Patient with given ID already exists' });
+  }
+
+  res.send(patient);
+});
+
 export default router;
