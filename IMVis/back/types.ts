@@ -1,9 +1,16 @@
 export interface Patient {
   id: string;
-  imageIds?: string[];
+  planIds: string[];
 };
 
-export interface Image {
+export interface Plan {
+  id: string;
+  patientId: string;
+  image: Img;
+  dose: Dose;
+};
+
+export interface Img {
   id: string;
 
   xsize: number;
@@ -12,7 +19,7 @@ export interface Image {
 
   data: number[][][];
 
-  structureset?: StructureSet;
+  structureset: StructureSet;
 };
 
 export interface StructureSet {
@@ -22,7 +29,38 @@ export interface StructureSet {
 
 export interface Structure {
   id: string;
-  color: [number, number, number]; // RGB
+  idx: number;
+  color: string; // #Hex123
   contours: [number, number][][]; // (x,y) -> layer -> all layers
 };
 
+export interface Dose {
+  id: string;
+
+  xsize: number; // To convert idx in data to (x,y)
+  ysize: number;
+  zsize: number;
+
+  fields?: Field[];
+
+  influences: [number, number][][]; // [(idx, contribution)] -> all spots (nRows)
+  weights: number[]; // weights times influences is dose
+};
+
+export interface Field {
+  id: string;
+  angle: number; // Field angle in degrees
+
+  layers: Layer[];
+};
+
+export interface Layer {
+  energy: number;
+  spots: Spot[];
+};
+
+export interface Spot {
+  globalIdx: number; // Unique index for each spot of a plan
+  influence: [number, number][]; // list of [dose grid idx, relative contribution]
+  weight: number;
+};

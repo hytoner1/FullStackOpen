@@ -6,10 +6,10 @@ app.use(express.json());
 app.use(cors());
 
 import patientRouter from './routes/patients';
-import imageRouter from './routes/images';
+import planRouter from './routes/plans';
 
 app.use('/api/patients', patientRouter);
-app.use('/api/images', imageRouter);
+app.use('/api/plans', planRouter);
 
 app.get('/api/ping', (_req, res) => {
   res.send('pong');

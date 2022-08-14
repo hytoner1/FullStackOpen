@@ -10,6 +10,7 @@
     "@mui/material": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "axios": "^0.27.2",
     "react": "latest",
     "react-dom": "latest",
     "react-scripts": "latest",
