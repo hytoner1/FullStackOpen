@@ -31,8 +31,20 @@ export default function SpotsPane({ weights, dose }:
     );
   }
 
+  const expanded = [];
+  if (dose.fields) {
+    for (let fieldIdx = 0; fieldIdx < dose.fields.length; fieldIdx++) {
+      const field = dose.fields[fieldIdx];
+      expanded.push(field.id);
+      for (let layerIdx = 0; layerIdx < field.layers.length; layerIdx++) {
+        const layer = field.layers[layerIdx];
+        expanded.push(`${field.id}-${layer.energy.toFixed(0)}`);
+      }
+    }
+  }
+
   return (
-    <TreeView>
+    <TreeView expanded={expanded}>
       {
         dose.fields?.map((field: Field) => (
           <TreeItem

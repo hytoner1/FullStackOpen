@@ -54,9 +54,12 @@ export default function App() {
         <Stack direction='row' spacing={3}
           divider={<Divider orientation="vertical" flexItem sx={{ mr: 1 }} />}
         >
-          <ContextPane patient={patient} plan={plan} checkedList={checkedList} setCheckedList={setCheckedList} />
-
-          <Stack spacing={2}>
+          {
+            { patient } && { plan } &&
+            <ContextPane patient={patient} plan={plan} checkedList={checkedList} setCheckedList={setCheckedList} />
+          }
+          {
+            { plan } && { weights } && { influences } &&
             <MainPane
               plan={plan}
               checkedList={checkedList}
@@ -64,9 +67,11 @@ export default function App() {
               setWeights={setWeights}
               influences={influences}
             />
-          </Stack>
-
-          <SpotsPane weights={weights} dose={plan.dose} />
+          }
+          {
+            { plan } && { weights } &&
+            <SpotsPane weights={weights} dose={plan.dose} />
+          }
         </Stack>
       </Box>
     </Container>
